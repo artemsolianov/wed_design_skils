@@ -51,6 +51,19 @@ img {
   display: block;
 }
 
+/* Едва заметная бумажная зернистость поверх всего сайта — печатное,
+   а не "плоское экранное" ощущение. Один фиксированный слой, без веса
+   картинки: чистый SVG-шум через data-URI. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 a {
   color: inherit;
 }
@@ -86,6 +99,18 @@ ul {
   --color-line-strong: #C9B892;
   --color-focus: #4B6B7A;       /* контрастный цвет для фокуса (доступность) */
 
+  /* Единственный яркий акцент — используется точечно (CTA, цифры, штрихи),
+     чтобы палитра не читалась как "всё в одном тоне". */
+  --color-rust: #B3542C;
+  --color-rust-deep: #8F3F1F;
+  --color-rust-light: #E8A776;
+
+  /* Тёмная секция для контрастного ритма между блоками */
+  --color-dark: #2B2318;
+  --color-dark-surface: #35291D;
+  --color-on-dark: #F6ECDC;
+  --color-on-dark-soft: #CBB99A;
+
   /* Шрифты */
   --font-display: 'Playfair Display', 'Georgia', serif;
   --font-body: 'Montserrat', 'Segoe UI', sans-serif;
@@ -108,8 +133,9 @@ ul {
   --text-lead: clamp(1.125rem, 0.6vw + 1rem, 1.375rem);
   --text-h3: clamp(1.25rem, 1vw + 1.05rem, 1.625rem);
   --text-h2: clamp(1.75rem, 2.2vw + 1.2rem, 2.75rem);
-  --text-h1: clamp(2.5rem, 5vw + 1.2rem, 4.75rem);
+  --text-h1: clamp(3rem, 7vw + 1rem, 6.5rem);
   --text-script: clamp(1.5rem, 2vw + 1rem, 2.25rem);
+  --text-giant: clamp(7rem, 34vw, 26rem);
 
   --radius-s: 6px;
   --radius-m: 14px;
@@ -241,6 +267,56 @@ textarea:focus-visible,
 .section--alt {
   background: var(--color-bg-alt);
 }
+
+/* Тёмная секция — контрастный такт в ритме страницы среди светлых блоков,
+   с фигурными (диагональными) стыками вместо ровных горизонтальных линий. */
+.section--dark {
+  background: var(--color-dark);
+  color: var(--color-on-dark-soft);
+}
+
+.section--dark .eyebrow { color: var(--color-rust-light); }
+.section--dark .eyebrow::before,
+.section--dark .eyebrow::after { background: var(--color-rust-light); opacity: 0.5; }
+/* Внимание: переопределяем цвета только у заголовка секции и текста "в воздухе"
+   тёмного фона — карточки (.location-card) остаются светлыми и сохраняют
+   свои обычные (тёмные на светлом) цвета текста, их не трогаем. */
+.section--dark .section-head h2 { color: var(--color-on-dark); }
+.section--dark .section-head p { color: var(--color-on-dark-soft); }
+.section--dark .map-note { color: var(--color-on-dark-soft); opacity: 0.8; }
+
+.shape-divider {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 44px;
+  overflow: hidden;
+  line-height: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (min-width: 700px) {
+  .shape-divider { height: 84px; }
+}
+
+.shape-divider svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.shape-divider--top {
+  top: 0;
+  transform: translateY(-99%);
+}
+
+.shape-divider--bottom {
+  bottom: 0;
+  transform: translateY(99%);
+}
+
+.shape-divider .fill-dark { fill: var(--color-dark); }
 
 .section-head {
   max-width: 46rem;
@@ -421,12 +497,12 @@ textarea:focus-visible,
 .btn:active { transform: scale(0.97); }
 
 .btn-primary {
-  background: var(--color-ink);
-  color: var(--color-bg);
-  box-shadow: var(--shadow-card);
+  background: var(--color-rust);
+  color: #FFFAF0;
+  box-shadow: 0 14px 30px -14px rgba(143, 63, 31, 0.55);
 }
 
-.btn-primary:hover { background: var(--color-olive-deep); }
+.btn-primary:hover { background: var(--color-rust-deep); }
 
 .btn-outline {
   background: transparent;
@@ -473,13 +549,39 @@ textarea:focus-visible,
   z-index: -1;
 }
 
+/* Огромная водяная цифра года — фон-акцент за текстом героя, приём из
+   редакторских/журнальных обложек: масштаб создаёт драму без лишнего шума. */
+.hero-watermark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-watermark span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-giant);
+  line-height: 1;
+  color: rgba(255, 252, 245, 0.1);
+  letter-spacing: -0.02em;
+  transform: translateY(4%);
+  white-space: nowrap;
+}
+
 .hero-inner {
   margin-inline: auto;
-  max-width: 44rem;
+  max-width: 46rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-5);
+  position: relative;
+  z-index: 1;
 }
 
 .hero .eyebrow { color: rgba(255, 250, 238, 0.92); }
@@ -489,6 +591,30 @@ textarea:focus-visible,
 .hero h1 {
   color: #FFFCF5;
   text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  letter-spacing: -0.015em;
+}
+
+/* Появление героя при загрузке страницы — не ждём скролла, это первое,
+   что видит гость. Один плавный каскад, не более 900мс суммарно. */
+.hero-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: heroIn 0.8s var(--ease-out) forwards;
+}
+
+.hero-reveal:nth-child(1) { animation-delay: 0.05s; }
+.hero-reveal:nth-child(2) { animation-delay: 0.16s; }
+.hero-reveal:nth-child(3) { animation-delay: 0.27s; }
+.hero-reveal:nth-child(4) { animation-delay: 0.38s; }
+.hero-reveal:nth-child(5) { animation-delay: 0.49s; }
+.hero-reveal:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes heroIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-reveal { opacity: 1; transform: none; animation: none; }
 }
 
 .hero .tagline {
@@ -637,9 +763,10 @@ textarea:focus-visible,
 
 .timeline-time {
   font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-size: clamp(1.75rem, 2vw + 1.2rem, 2.5rem);
   font-weight: 700;
-  color: var(--color-sand-deep);
+  color: var(--color-rust);
+  line-height: 1;
 }
 
 .timeline-card {
@@ -695,7 +822,7 @@ textarea:focus-visible,
 .map-embed {
   position: relative;
   width: 100%;
-  aspect-ratio: 4 / 3;
+  height: 360px;
   border-radius: var(--radius-l);
   overflow: hidden;
   box-shadow: var(--shadow-card);
@@ -703,16 +830,15 @@ textarea:focus-visible,
 }
 
 @media (min-width: 640px) {
-  .map-embed { aspect-ratio: 16 / 10; }
+  .map-embed { height: 460px; }
 }
 
 .map-embed iframe {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   border: 0;
-  filter: sepia(8%) saturate(92%);
 }
 
 .map-note {
@@ -801,37 +927,79 @@ textarea:focus-visible,
   margin-top: 0.2em;
 }
 
-/* ---------- 11. Подарки ---------- */
+/* ---------- 11. Подарки — крупная редакторская цитата, без рамок ---------- */
 
-.gifts-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: var(--space-4);
+.gifts-section { background: var(--color-bg-alt); }
+
+.gifts-inner {
+  position: relative;
   max-width: 40rem;
   margin-inline: auto;
-  padding: var(--space-8) var(--space-6);
-  background: var(--color-surface);
-  border-radius: var(--radius-l);
-  box-shadow: var(--shadow-card);
+  text-align: center;
 }
 
-.gifts-card svg {
-  width: 48px;
-  height: 48px;
-  color: var(--color-sand-deep);
+.quote-mark {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 10vw, 8rem);
+  line-height: 1;
+  color: var(--color-rust-light);
+  opacity: 0.6;
+}
+
+.gifts-quote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.6vw + 1rem, 2.75rem);
+  line-height: 1.25;
+  color: var(--color-ink);
+  margin-top: calc(-1 * var(--space-6));
+  max-width: none;
+}
+
+.gifts-note {
+  margin-top: var(--space-5);
+  color: var(--color-ink-soft);
+  margin-inline: auto;
 }
 
 /* ---------- 12. RSVP ---------- */
 
+.rsvp-layout {
+  display: grid;
+  gap: var(--space-8);
+}
+
+@media (min-width: 900px) {
+  .rsvp-layout {
+    grid-template-columns: 0.85fr 1fr;
+    align-items: center;
+    gap: var(--space-9);
+  }
+}
+
+.rsvp-intro { max-width: 30rem; }
+.rsvp-intro .lead { margin-top: var(--space-4); }
+
+.rsvp-intro-signature {
+  display: inline-block;
+  margin-top: var(--space-6);
+  font-size: var(--text-h3);
+}
+
 .rsvp-wrap {
   max-width: 38rem;
+  width: 100%;
   margin-inline: auto;
   background: var(--color-surface);
   border-radius: var(--radius-l);
   padding: var(--space-7) var(--space-6);
   box-shadow: var(--shadow-soft);
+}
+
+@media (min-width: 900px) {
+  .rsvp-wrap { margin-inline: 0; }
 }
 
 @media (min-width: 640px) {
@@ -1035,10 +1203,29 @@ textarea:focus-visible,
 /* ---------- 13. Подвал ---------- */
 
 .footer-hero {
+  position: relative;
   padding-block: var(--space-9);
   text-align: center;
   background: linear-gradient(180deg, var(--color-bg-alt), var(--color-bg));
+  overflow: hidden;
 }
+
+.footer-hero-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(14rem, 44vw, 32rem);
+  line-height: 1;
+  color: var(--color-rust);
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footer-hero .container { position: relative; z-index: 1; }
 
 .footer-hero .script-accent {
   display: block;
@@ -1072,12 +1259,19 @@ textarea:focus-visible,
   right: var(--space-4);
   bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
   z-index: 90;
-  transform: translateY(120%);
-  transition: transform 0.3s var(--ease-out);
+  /* Сдвиг считается от собственной высоты кнопки, а не от вьюпорта — на
+     низких кнопках 120% не уводило её за край экрана полностью, снизу
+     оставалась тонкая полоска. 100% высоты + фиксированный запас с лихвой
+     перекрывают нижний отступ при любой высоте кнопки. */
+  transform: translateY(calc(100% + var(--space-4) + 40px));
+  visibility: hidden;
+  transition: transform 0.3s var(--ease-out), visibility 0s linear 0.3s;
 }
 
 .floating-rsvp.is-visible {
   transform: translateY(0);
+  visibility: visible;
+  transition: transform 0.3s var(--ease-out);
 }
 
 @media (min-width: 900px) {

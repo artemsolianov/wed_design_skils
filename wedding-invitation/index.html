@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+<div class="grain" aria-hidden="true"></div>
 <a class="skip-link" href="#main">Перейти к содержимому</a>
 
 <header class="site-header">
@@ -54,17 +55,18 @@
 
   <!-- ============ ГЕРОЙ ============ -->
   <section class="hero" id="hero">
+    <div class="hero-watermark" aria-hidden="true"><span>2026</span></div>
     <div class="container hero-inner">
-      <p class="eyebrow">19 сентября 2026 года</p>
-      <h1>Артём &amp; Юлия</h1>
-      <p class="tagline">Мы женимся!</p>
-      <p class="lead">
+      <p class="eyebrow hero-reveal">19 сентября 2026 года</p>
+      <h1 class="hero-reveal">Артём &amp; Юлия</h1>
+      <p class="tagline hero-reveal">Мы женимся!</p>
+      <p class="lead hero-reveal">
         Кажется, это именно тот день, который хочется провести рядом&nbsp;с
         самыми дорогими людьми. Будем счастливы, если вы разделите&nbsp;с
         нами этот праздник и&nbsp;станете частью нашей истории.
       </p>
 
-      <div class="countdown" role="group" aria-label="Обратный отсчёт до церемонии">
+      <div class="countdown hero-reveal" role="group" aria-label="Обратный отсчёт до церемонии">
         <div class="countdown-cell">
           <span class="countdown-num" data-unit="days">00</span>
           <span class="countdown-label">дней</span>
@@ -84,7 +86,7 @@
       </div>
       <noscript><p class="lead">До встречи — 19 сентября 2026 года, в 14:30.</p></noscript>
 
-      <div class="hero-actions">
+      <div class="hero-actions hero-reveal">
         <a class="btn btn-primary" href="#rsvp">Подтвердить присутствие</a>
         <a class="btn btn-outline" href="#program">Программа дня</a>
       </div>
@@ -162,18 +164,12 @@
     </div>
   </section>
 
-  <div class="wheat-divider" aria-hidden="true">
-    <svg viewBox="0 0 200 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
-      <path d="M2 20h56"/>
-      <path d="M70 20c6-10 14-16 24-18M70 20c6 10 14 16 24 18M78 14c4-2 8-2 12-1M78 26c4 2 8 2 12 1M86 8c4 0 7 2 9 4M86 32c4 0 7-2 9-4"/>
-      <circle cx="100" cy="20" r="2.4" fill="currentColor" stroke="none"/>
-      <path d="M116 20c6-10 14-16 24-18M116 20c6 10 14 16 24 18M124 14c4-2 8-2 12-1M124 26c4 2 8 2 12 1M132 8c4 0 7 2 9 4M132 32c4 0 7-2 9-4"/>
-      <path d="M142 20h56"/>
-    </svg>
-  </div>
-
   <!-- ============ МЕСТО ПРОВЕДЕНИЯ / КАРТА ============ -->
-  <section class="section section--alt" id="location">
+  <section class="section section--dark" id="location">
+    <div class="shape-divider shape-divider--top" aria-hidden="true">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><polygon class="fill-dark" points="0,100 1440,0 1440,100" /></svg>
+    </div>
+
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">Место проведения</p>
@@ -186,24 +182,13 @@
 
       <div class="location-grid">
         <div class="reveal">
-          <!--
-            КАК ПОДКЛЮЧИТЬ ТОЧНЫЙ АДРЕС:
-            1. Перейдите на https://yandex.ru/map-constructor/
-            2. Создайте карту типа «Одна метка» и укажите точный адрес
-               ресторана «Белый рояль» (или его координаты).
-            3. Скопируйте предложенный сервисом <iframe> и замените
-               им блок ниже — тогда на карте будет точная метка
-               с адресом, а не приблизительный текстовый поиск.
-            Сейчас здесь рабочий предпросмотр по текстовому запросу —
-            он уже показывает нужный район города.
-          -->
+          <!-- Точная метка ресторана «Белый рояль», встроенная через Яндекс.Конструктор карт. -->
           <div class="map-embed">
-            <iframe
-              src="https://yandex.ru/map-widget/v1/?text=Краснодарский%20край%2C%20Курганинск%2C%20ресторан%20Белый%20рояль&z=15&l=map"
-              title="Карта: ресторан «Белый рояль», Курганинск"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+            <script
+              type="text/javascript"
+              charset="utf-8"
+              src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A9f56558a8ad59835c5367de49248af070a56bc493934676446ed41fee20846d1&amp;width=100%25&amp;height=460&amp;lang=ru_RU&amp;scroll=true"
+            ></script>
           </div>
           <p class="map-note">
             Если карта загружается медленно или не&nbsp;отображается —
@@ -229,6 +214,10 @@
           </a>
         </div>
       </div>
+    </div>
+
+    <div class="shape-divider shape-divider--bottom" aria-hidden="true">
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><polygon class="fill-dark" points="0,100 1440,0 1440,100" /></svg>
     </div>
   </section>
 
@@ -293,14 +282,23 @@
     </div>
   </section>
 
+  <div class="wheat-divider" aria-hidden="true">
+    <svg viewBox="0 0 200 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <path d="M2 20h56"/>
+      <path d="M70 20c6-10 14-16 24-18M70 20c6 10 14 16 24 18M78 14c4-2 8-2 12-1M78 26c4 2 8 2 12 1M86 8c4 0 7 2 9 4M86 32c4 0 7-2 9-4"/>
+      <circle cx="100" cy="20" r="2.4" fill="currentColor" stroke="none"/>
+      <path d="M116 20c6-10 14-16 24-18M116 20c6 10 14 16 24 18M124 14c4-2 8-2 12-1M124 26c4 2 8 2 12 1M132 8c4 0 7 2 9 4M132 32c4 0 7-2 9-4"/>
+      <path d="M142 20h56"/>
+    </svg>
+  </div>
+
   <!-- ============ ПОДАРКИ ============ -->
-  <section class="section section--alt" id="gifts">
+  <section class="section gifts-section" id="gifts">
     <div class="container">
-      <div class="gifts-card reveal">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="9" width="18" height="12" rx="1.5"/><path d="M3 9h18M12 9v12M12 9c-2 0-3.5-1.5-3.5-3.2C8.5 4 10 3 11.3 3.5 12.3 3.9 12 6 12 9zM12 9c2 0 3.5-1.5 3.5-3.2C15.5 4 14 3 12.7 3.5 11.7 3.9 12 6 12 9z"/></svg>
-        <h2>Подарки</h2>
-        <p class="lead">Ваше присутствие — самый ценный подарок для&nbsp;нас.</p>
-        <p>
+      <div class="gifts-inner reveal">
+        <span class="quote-mark" aria-hidden="true">”</span>
+        <p class="gifts-quote">Ваше присутствие — самый ценный подарок для&nbsp;нас</p>
+        <p class="gifts-note">
           Если вы захотите поздравить нас ещё и&nbsp;подарком, мы будем
           благодарны за&nbsp;вклад в&nbsp;наше общее будущее.
         </p>
@@ -310,10 +308,15 @@
 
   <!-- ============ RSVP ============ -->
   <section class="section" id="rsvp">
-    <div class="container">
-      <div class="section-head text-center reveal" style="margin-inline:auto;">
+    <div class="container rsvp-layout">
+      <div class="rsvp-intro reveal">
         <p class="eyebrow">RSVP</p>
         <h2>Подтвердите, пожалуйста, своё присутствие</h2>
+        <p class="lead">
+          Нам очень важно знать точно, сколько накрывать столов и&nbsp;кого
+          обнимать первым. Пара минут — и&nbsp;мы спокойны.
+        </p>
+        <span class="script-accent rsvp-intro-signature">До встречи!</span>
       </div>
 
       <div class="rsvp-wrap reveal">
@@ -374,6 +377,7 @@
 
   <!-- ============ ЗАКРЫТИЕ ============ -->
   <section class="footer-hero">
+    <span class="footer-hero-mark" aria-hidden="true">&amp;</span>
     <div class="container reveal">
       <p class="eyebrow">До скорой встречи!</p>
       <h2>С нетерпением ждём этот день</h2>
