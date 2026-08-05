@@ -32,3 +32,27 @@ python3 .claude/skills/ui-ux-pro-max/scripts/search.py "<query>" --stack <stack>
 
 Vendored from [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
 (MIT licensed — see `LICENSE`).
+
+## MCP servers
+
+### `21st` (21st MCP — UI component generation/search)
+
+`.mcp.json` at the repo root registers the [21st MCP](https://21st.dev/mcp) as a
+project-scoped HTTP MCP server. It gives Claude Code tools to search 21st.dev's
+component catalog, pull inspiration, and generate/refine UI components and logos on
+demand (`generate`, `search`, `get_inspiration`, `search_logo`, `get_component`, and
+more — call `tools/list` once connected for the full set).
+
+**Setup (one-time, per machine):**
+
+1. Get an API key at [21st.dev/mcp](https://21st.dev/mcp).
+2. Export it in your shell before opening Claude Code in this repo:
+   ```bash
+   export TWENTY_FIRST_API_KEY="your-key-here"
+   ```
+   Claude Code expands `${TWENTY_FIRST_API_KEY}` from `.mcp.json` at connect time — the
+   key itself is never committed to this repo.
+
+Note: this repo's `.mcp.json` targets the current 21st MCP directly (`https://21st.dev/api/mcp`).
+The older `@21st-dev/magic` npm package (formerly "Magic MCP") is now just a
+compatibility proxy for the same backend and isn't needed here.
