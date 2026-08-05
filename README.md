@@ -1,7 +1,17 @@
 # wed_design_skils
 
 Claude Code skills for design work, vendored into this repo under `.claude/skills/` so
-they're available automatically in any session opened here.
+they're available automatically in any session opened here — plus real design work
+produced using them.
+
+## Projects
+
+### `wedding-invitation/`
+
+Свадебный сайт-приглашение для Артёма и Юлии (19 сентября 2026) — одностраничник
+на чистых HTML/CSS/JS, собранный с помощью скилла `ui-ux-pro-max` и принципов
+типографики бюро Горбунова. Подробности, включая как добавить реальные фото,
+точный адрес на карте и приём заявок RSVP — в `wedding-invitation/README.md`.
 
 ## Skills
 
