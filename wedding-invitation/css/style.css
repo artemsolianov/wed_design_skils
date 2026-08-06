@@ -376,6 +376,8 @@ textarea:focus-visible,
   letter-spacing: 0.02em;
   text-decoration: none;
   display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   gap: 0.35em;
   /* Шапка стоит поверх фото героя, пока страница не проскроллена — там
      нужен светлый текст. Как только появляется непрозрачная подложка
@@ -865,21 +867,20 @@ textarea:focus-visible,
 .dresscode-section { padding-bottom: var(--space-8); }
 
 /* Вырывается из .container на всю ширину окна — приём, который стоит
-   поберечь для одного места на странице, чтобы он не обесценился. */
+   поберечь для одного места на странице, чтобы он не обесценился.
+   На телефоне — сетка 2×4, без горизонтального свайпа: жест "потянуть
+   вбок" внутри вертикально скроллящейся страницы — один из самых
+   ненадёжных паттернов на мобильных (браузер может перехватить его как
+   обычный скролл страницы), а телефон здесь — основной сценарий. */
 .palette-strip {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   margin-top: var(--space-7);
   margin-bottom: var(--space-7);
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
-
-.palette-strip::-webkit-scrollbar { display: none; }
 
 .swatch {
   appearance: none;
@@ -888,27 +889,25 @@ textarea:focus-visible,
   text-align: left;
   cursor: pointer;
   position: relative;
-  flex: 0 0 42vw;
   min-width: 0; /* иначе flex-shrink игнорируется из-за min-width:auto на длинных названиях */
-  scroll-snap-align: start;
-  height: 62vw;
-  max-height: 300px;
+  height: 46vw;
+  max-height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: var(--space-4);
   color: var(--color-ink);
   -webkit-tap-highlight-color: transparent;
-  transition: flex-basis 0.3s var(--ease-out);
 }
 
 @media (min-width: 560px) {
-  .swatch { flex: 0 0 24vw; height: 40vw; max-height: 360px; }
+  .palette-strip { grid-template-columns: repeat(4, 1fr); }
+  .swatch { height: 34vw; max-height: 280px; }
 }
 
 @media (min-width: 900px) {
-  .palette-strip { scroll-snap-type: none; overflow: visible; }
-  .swatch { flex: 1 1 0; height: 22vw; max-height: 340px; min-height: 260px; }
+  .palette-strip { grid-template-columns: repeat(8, 1fr); }
+  .swatch { height: 22vw; max-height: 340px; min-height: 260px; }
 }
 
 .swatch[data-ink="light"] { color: #FFFCF5; }
@@ -1079,8 +1078,10 @@ textarea:focus-visible,
 .back-to-top {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
+  padding-inline: var(--space-2);
   gap: var(--space-2);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-2);
   text-decoration: none;
   font-weight: 600;
   color: var(--color-ink-soft);
