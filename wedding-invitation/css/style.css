@@ -690,8 +690,12 @@ textarea:focus-visible,
 /* Обратный отсчёт */
 .countdown {
   display: grid;
-  grid-auto-flow: column;
-  gap: var(--space-3);
+  /* minmax(0, 1fr), а не auto-flow: column — иначе implicit-колонки берут
+     ширину по min-content и грид просто вылезает за экран на узких
+     телефонах вместо того, чтобы сжаться (та же природа бага, что была
+     в полосе образцов дресс-кода, только для grid, а не flex). */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.375rem, 2vw, var(--space-3));
   margin-top: var(--space-4);
 }
 
@@ -699,8 +703,8 @@ textarea:focus-visible,
   background: rgba(255, 252, 245, 0.14);
   border: 1px solid rgba(255, 252, 245, 0.35);
   border-radius: var(--radius-m);
-  padding: var(--space-3) var(--space-4);
-  min-width: 4.25rem;
+  padding: var(--space-3) clamp(0.5rem, 2vw, var(--space-4));
+  min-width: 0;
   backdrop-filter: blur(6px);
 }
 
