@@ -1,0 +1,16 @@
+{
+  "name": "wedding-invitation-tests",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Test tooling for the static wedding invitation site. The site itself stays plain HTML/CSS/JS with no build step — this package.json exists only so Playwright can run accessibility, visual-regression, and functional checks against it.",
+  "scripts": {
+    "test": "playwright test",
+    "test:update-screenshots": "playwright test --update-snapshots",
+    "test:ui": "playwright test --ui",
+    "serve": "node scripts/serve.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.55.0"
+  }
+}

@@ -123,6 +123,11 @@ ul {
      используется единично (дедлайн RSVP, одна из двух временных меток
      программы), не наравне с золотом. */
   --color-wine: #6E2438;
+  /* Тот же акцент, но светлее — для текста ПО зелёному полю. Тёмное
+     --color-wine годится только как заливка (плашка дедлайна, текст на
+     ней кремовый) — как цвет текста прямо на --color-bg оно даёт 1.45:1,
+     это поймал автоматический аудит accessibility (axe), не глаз. */
+  --color-wine-light: #C97285;
 
   /* Оставлены для обратной совместимости с общими селекторами секций —
      alt чуть глубже основного зелёного, тот же приём ритма, что раньше
@@ -386,7 +391,6 @@ textarea:focus-visible,
   transition: color 0.2s var(--ease-out);
 }
 
-.nav-desktop a:hover,
 .nav-desktop a:focus-visible {
   color: var(--color-ink);
 }
@@ -402,9 +406,23 @@ textarea:focus-visible,
   transition: transform 0.25s var(--ease-out);
 }
 
-.nav-desktop a:hover::after,
 .nav-desktop a:focus-visible::after {
   transform: scaleX(1);
+}
+
+/* Hover gated behind (hover:hover) and (pointer:fine) — nav-desktop only
+   renders from 900px up, but a tablet in that range is still a touch
+   device: without the gate, tapping a link leaves it visually "stuck"
+   hovered until the user taps elsewhere. Keyboard focus above is
+   unaffected — it must work regardless of pointer type. */
+@media (hover: hover) and (pointer: fine) {
+  .nav-desktop a:hover {
+    color: var(--color-ink);
+  }
+
+  .nav-desktop a:hover::after {
+    transform: scaleX(1);
+  }
 }
 
 .nav-cta {
@@ -429,6 +447,11 @@ textarea:focus-visible,
   background: var(--color-bg-alt);
   color: var(--color-ink);
   cursor: pointer;
+  transition: transform 0.15s var(--ease-out);
+}
+
+.menu-toggle:active {
+  transform: scale(0.94);
 }
 
 @media (min-width: 900px) {
@@ -508,15 +531,20 @@ textarea:focus-visible,
   color: var(--color-ink);
 }
 
-.btn-primary:hover { background: var(--color-bg-alt); }
-
 .btn-outline {
   background: var(--color-parchment);
   border-color: var(--color-bg);
   color: var(--color-parchment-ink);
 }
 
-.btn-outline:hover { background: var(--color-parchment-alt); }
+/* Hover gated behind (hover:hover) and (pointer:fine) — these buttons are
+   the primary tap targets on the primary device (phone). Ungated, a tap
+   leaves the hover background "stuck" on until the guest taps elsewhere;
+   :active below already gives touch its own, immediate feedback. */
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover { background: var(--color-bg-alt); }
+  .btn-outline:hover { background: var(--color-parchment-alt); }
+}
 
 .btn-block { width: 100%; }
 
@@ -596,12 +624,14 @@ textarea:focus-visible,
   animation: heroIn 0.8s var(--ease-out) forwards;
 }
 
-.hero-reveal:nth-child(1) { animation-delay: 0.05s; }
-.hero-reveal:nth-child(2) { animation-delay: 0.16s; }
-.hero-reveal:nth-child(3) { animation-delay: 0.27s; }
-.hero-reveal:nth-child(4) { animation-delay: 0.38s; }
-.hero-reveal:nth-child(5) { animation-delay: 0.49s; }
-.hero-reveal:nth-child(6) { animation-delay: 0.6s; }
+/* Шаг 70мс — в пределах рекомендованных 30-80мс между элементами каскада
+   (было 110мс, ощутимо медленнее, чем нужно для первого впечатления). */
+.hero-reveal:nth-child(1) { animation-delay: 0s; }
+.hero-reveal:nth-child(2) { animation-delay: 0.07s; }
+.hero-reveal:nth-child(3) { animation-delay: 0.14s; }
+.hero-reveal:nth-child(4) { animation-delay: 0.21s; }
+.hero-reveal:nth-child(5) { animation-delay: 0.28s; }
+.hero-reveal:nth-child(6) { animation-delay: 0.35s; }
 
 @keyframes heroIn {
   to { opacity: 1; transform: translateY(0); }
@@ -787,7 +817,13 @@ textarea:focus-visible,
 /* Второе время программы в винном акценте вместо золота — то же самое
    различение, что у виноделов между цветом урожая: два события дня,
    два оттенка одного материала, не два случайных цвета. */
-.timeline-item:nth-child(2) .timeline-time { color: var(--color-wine); }
+/* :nth-of-type, не :nth-child — .timeline-flourish (svg) идёт первым
+   внутри .timeline, так что :nth-child(2) на самом деле попадал на ПЕРВЫЙ
+   .timeline-item (14:30, церемония), а не на второй (16:00, банкет), как
+   задумывалось. :nth-of-type считает только среди <div>-соседей того же
+   тега, свг в счёт не идёт. Баг нашёлся только через автоматический
+   accessibility-скан — визуально оба варианта смотрелись "нормально". */
+.timeline-item:nth-of-type(2) .timeline-time { color: var(--color-wine-light); }
 
 .timeline-time span {
   font-size: 0.5em;
@@ -838,6 +874,17 @@ textarea:focus-visible,
   flex-direction: column;
   gap: var(--space-3);
   height: 100%;
+}
+
+/* Заголовки h1-h4 сайта явно красятся в --color-ink (кремовый, для
+   зелёного фона) глобальным правилом ниже по каскаду — h3 внутри карточки
+   получает этот цвет НАПРЯМУЮ, а не через наследование, поэтому заливка
+   .location-card его не перекрывает. Кремовый на пергаменте — 1.03:1
+   (почти невидимо), реальная находка автоматического аудита (axe), не
+   тайминг реявла: глазами два близких светлых тона легко принять за один
+   и тот же читаемый цвет на маленьком скриншоте. */
+.location-card h3 {
+  color: var(--color-parchment-ink);
 }
 
 .location-card .icon-pin {
@@ -902,6 +949,14 @@ textarea:focus-visible,
   padding: var(--space-4);
   color: var(--color-parchment-ink);
   -webkit-tap-highlight-color: transparent;
+  transition: transform 0.15s var(--ease-out);
+}
+
+/* Тактильный отклик на нажатие — раньше его не было ни на одном тапабельном
+   элементе, кроме .btn. Свотч — реальная кнопка (клик копирует hex), и
+   отклик на неё уместен ровно как на любой другой нажимаемой поверхности. */
+.swatch:active {
+  transform: scale(0.97);
 }
 
 @media (min-width: 560px) {

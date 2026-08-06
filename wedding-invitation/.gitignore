@@ -1,0 +1,10 @@
+# Test tooling artifacts — the site itself has no build step, this is
+# only for the Playwright suite under tests/.
+node_modules/
+playwright-report/
+test-results/
+.impeccable/
+
+# Baseline screenshots ARE committed on purpose (tests/*-snapshots/) —
+# that's the point of visual-regression testing: future runs diff against
+# these. Don't add a blanket *.png ignore here.
