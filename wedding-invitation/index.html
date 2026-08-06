@@ -59,7 +59,7 @@
   <section class="hero" id="hero">
     <div class="hero-watermark" aria-hidden="true"><span>2026</span></div>
     <div class="container hero-inner">
-      <p class="eyebrow hero-reveal">19 сентября 2026 года</p>
+      <p class="hero-date hero-reveal">19 сентября 2026</p>
       <h1 class="hero-reveal">Артём &amp; Юлия</h1>
       <p class="tagline hero-reveal">Мы женимся!</p>
       <p class="lead hero-reveal">
@@ -109,11 +109,19 @@
       </div>
 
       <div class="timeline">
+        <!-- Декоративный росчерк — по мотивам присланного рефа (плавная
+             линия + сердечки у каждого времени). Растягивается по высоте
+             под реальный контент, поэтому это мягкая кривая, а не жёсткая
+             геометрия (жёсткие углы на разных экранах сильно "плывут",
+             кривая — куда терпимее к растяжению). -->
+        <svg class="timeline-flourish" viewBox="0 0 60 400" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M30,10 C55,55 55,115 30,155 C5,195 5,245 30,290 C50,320 50,360 30,390" fill="none" stroke="var(--color-olive-deep)" stroke-width="1.3" stroke-linecap="round" opacity="0.45" vector-effect="non-scaling-stroke"/>
+          <path class="timeline-flourish-heart" transform="translate(42,68) scale(1.15)" d="M12 20.5s-7-4.4-9.5-8.6C.8 8.7 2.2 4.8 5.8 4.8c2 0 3.4 1.1 4.2 2.3.4.6 1.4.6 1.8 0 .9-1.2 2.3-2.3 4.3-2.3 3.6 0 5 3.9 3.3 7.1-2.5 4.2-9.4 8.6-9.4 8.6z"/>
+          <path class="timeline-flourish-heart" transform="translate(-6,248) scale(1.15)" d="M12 20.5s-7-4.4-9.5-8.6C.8 8.7 2.2 4.8 5.8 4.8c2 0 3.4 1.1 4.2 2.3.4.6 1.4.6 1.8 0 .9-1.2 2.3-2.3 4.3-2.3 3.6 0 5 3.9 3.3 7.1-2.5 4.2-9.4 8.6-9.4 8.6z"/>
+        </svg>
+
         <div class="timeline-item reveal">
-          <div class="timeline-time-wrap">
-            <div class="timeline-time">14<span>:30</span></div>
-            <svg class="timeline-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 20.5s-7-4.4-9.5-8.6C.8 8.7 2.2 4.8 5.8 4.8c2 0 3.4 1.1 4.2 2.3.4.6 1.4.6 1.8 0 .9-1.2 2.3-2.3 4.3-2.3 3.6 0 5 3.9 3.3 7.1-2.5 4.2-9.4 8.6-9.4 8.6z"/></svg>
-          </div>
+          <div class="timeline-time">14<span>:30</span></div>
           <div class="timeline-body">
             <h3>Церемония регистрации</h3>
             <span class="timeline-tag">ЗАГС города Курганинска</span>
@@ -126,10 +134,7 @@
         </div>
 
         <div class="timeline-item reveal">
-          <div class="timeline-time-wrap">
-            <div class="timeline-time">16<span>:00</span></div>
-            <svg class="timeline-heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 20.5s-7-4.4-9.5-8.6C.8 8.7 2.2 4.8 5.8 4.8c2 0 3.4 1.1 4.2 2.3.4.6 1.4.6 1.8 0 .9-1.2 2.3-2.3 4.3-2.3 3.6 0 5 3.9 3.3 7.1-2.5 4.2-9.4 8.6-9.4 8.6z"/></svg>
-          </div>
+          <div class="timeline-time">16<span>:00</span></div>
           <div class="timeline-body">
             <h3>Банкет</h3>
             <span class="timeline-tag">Ресторан «Белый рояль»</span>

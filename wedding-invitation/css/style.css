@@ -104,10 +104,13 @@ ul {
   --color-focus: #4B6B7A;       /* контрастный цвет для фокуса (доступность) */
 
   /* Единственный яркий акцент — используется точечно (CTA, цифры, штрихи),
-     чтобы палитра не читалась как "всё в одном тоне". */
-  --color-rust: #B3542C;
-  --color-rust-deep: #8F3F1F;
-  --color-rust-light: #E8A776;
+     чтобы палитра не читалась как "всё в одном тоне". Взят из собственной
+     палитры дресс-кода (оттенок "Коричневый"), а не отдельным цветом —
+     раньше здесь был терракотово-оранжевый, который считывался как
+     "фирменный оранжевый Клода", а не как цвет этой свадьбы. */
+  --color-rust: #6E4A34;
+  --color-rust-deep: #4F3423;
+  --color-rust-light: #C99A72;
 
   /* Тёмная секция для контрастного ритма между блоками */
   --color-dark: #2B2318;
@@ -294,15 +297,16 @@ textarea:focus-visible,
   position: absolute;
   left: 0;
   right: 0;
-  height: 44px;
+  /* Высота в vw, а не в фиксированных px — divider растягивается на всю
+     ширину экрана (100%), и с фиксированной высотой скос на узком
+     телефоне выходит вдвое круче, чем на десктопе (44px на 390px —
+     это вдвое больше по отношению, чем 84px на 1440px). vw держит угол
+     визуально одинаковым на любой ширине. */
+  height: clamp(22px, 6vw, 84px);
   overflow: hidden;
   line-height: 0;
   z-index: 2;
   pointer-events: none;
-}
-
-@media (min-width: 700px) {
-  .shape-divider { height: 84px; }
 }
 
 .shape-divider svg {
@@ -633,9 +637,18 @@ textarea:focus-visible,
   z-index: 1;
 }
 
-.hero .eyebrow { color: rgba(255, 250, 238, 0.92); }
-.hero .eyebrow::before,
-.hero .eyebrow::after { background: rgba(255, 250, 238, 0.6); }
+/* Дата — одна из главных новостей на странице (когда именно), а не
+   служебная подпись, поэтому она крупнее обычного eyebrow-лейбла
+   секций и без декоративных чёрточек по бокам. */
+.hero-date {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.375rem, 1.1vw + 1.1rem, 1.75rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFFCF5;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
 
 .hero h1 {
   color: #FFFCF5;
@@ -765,9 +778,21 @@ textarea:focus-visible,
 /* ---------- 8. Программа дня — крупное время вместо иконок-в-кружках ---------- */
 
 .timeline {
+  position: relative;
   display: flex;
   flex-direction: column;
+  padding-left: clamp(32px, 9vw, 44px);
 }
+
+.timeline-flourish {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: clamp(32px, 9vw, 44px);
+  height: 100%;
+}
+
+.timeline-flourish-heart { fill: var(--color-rust); opacity: 0.8; }
 
 .timeline-item {
   display: grid;
@@ -786,23 +811,10 @@ textarea:focus-visible,
   }
 }
 
-.timeline-time-wrap {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-}
-
-.timeline-heart {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  color: var(--color-olive-deep);
-  opacity: 0.65;
-}
-
 .timeline-time {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
+  font-style: italic;
   font-size: clamp(3rem, 5vw + 1rem, 4.5rem);
   line-height: 0.95;
   color: var(--color-rust);
