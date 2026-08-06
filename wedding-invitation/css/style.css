@@ -377,6 +377,17 @@ textarea:focus-visible,
   text-decoration: none;
   display: inline-flex;
   gap: 0.35em;
+  /* Шапка стоит поверх фото героя, пока страница не проскроллена — там
+     нужен светлый текст. Как только появляется непрозрачная подложка
+     (.is-scrolled), переключаемся обратно на тёмный. */
+  color: #FFFCF5;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.25);
+  transition: color 0.3s var(--ease-out), text-shadow 0.3s var(--ease-out);
+}
+
+.site-header.is-scrolled .brand {
+  color: var(--color-ink);
+  text-shadow: none;
 }
 
 .nav-desktop {
@@ -396,9 +407,16 @@ textarea:focus-visible,
   font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: var(--color-ink-soft);
+  color: rgba(255, 252, 245, 0.92);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
   padding-block: var(--space-2);
   position: relative;
+  transition: color 0.3s var(--ease-out), text-shadow 0.3s var(--ease-out);
+}
+
+.site-header.is-scrolled .nav-desktop a {
+  color: var(--color-ink-soft);
+  text-shadow: none;
 }
 
 .nav-desktop a::after {
@@ -406,10 +424,14 @@ textarea:focus-visible,
   position: absolute;
   left: 0; right: 0; bottom: -2px;
   height: 2px;
-  background: var(--color-sand-deep);
+  background: var(--color-rust-light);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s var(--ease-out);
+}
+
+.site-header.is-scrolled .nav-desktop a::after {
+  background: var(--color-sand-deep);
 }
 
 .nav-desktop a:hover::after,
@@ -419,6 +441,26 @@ textarea:focus-visible,
 
 .nav-cta {
   display: inline-flex;
+}
+
+.site-header .nav-cta.btn-outline {
+  border-color: rgba(255, 252, 245, 0.7);
+  color: #FFFCF5;
+}
+
+.site-header .nav-cta.btn-outline:hover {
+  border-color: #FFFCF5;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.site-header.is-scrolled .nav-cta.btn-outline {
+  border-color: var(--color-line-strong);
+  color: var(--color-ink);
+}
+
+.site-header.is-scrolled .nav-cta.btn-outline:hover {
+  border-color: var(--color-ink);
+  background: transparent;
 }
 
 .menu-toggle {
@@ -1345,12 +1387,8 @@ textarea:focus-visible,
 
 @media (min-width: 700px) {
   .gallery-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space-4);
-  }
-  .gallery-grid .photo.gallery-photo--wide {
-    grid-column: span 2;
-    aspect-ratio: 8 / 5;
   }
 }
 
