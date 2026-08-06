@@ -154,10 +154,6 @@
 
   <!-- ============ МЕСТО ПРОВЕДЕНИЯ / КАРТА ============ -->
   <section class="section section--dark" id="location">
-    <div class="shape-divider shape-divider--top" aria-hidden="true">
-      <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><polygon class="fill-dark" points="0,100 1440,0 1440,100" /></svg>
-    </div>
-
     <div class="container">
       <div class="section-head reveal">
         <p class="eyebrow">Место проведения</p>
@@ -168,44 +164,40 @@
         </p>
       </div>
 
-      <div class="location-grid">
-        <div class="reveal">
-          <!-- Точная метка ресторана «Белый рояль», встроенная через Яндекс.Конструктор карт. -->
-          <div class="map-embed">
-            <script
-              type="text/javascript"
-              charset="utf-8"
-              src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A9f56558a8ad59835c5367de49248af070a56bc493934676446ed41fee20846d1&amp;width=100%25&amp;height=460&amp;lang=ru_RU&amp;scroll=true"
-            ></script>
-          </div>
-          <p class="map-note">
-            Если карта загружается медленно или не&nbsp;отображается —
-            воспользуйтесь кнопкой ниже.
-          </p>
+      <div class="location-map-wrap reveal">
+        <!-- Точная метка ресторана «Белый рояль», встроенная через Яндекс.Конструктор карт. -->
+        <div class="map-embed">
+          <script
+            type="text/javascript"
+            charset="utf-8"
+            src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3A9f56558a8ad59835c5367de49248af070a56bc493934676446ed41fee20846d1&amp;width=100%25&amp;height=460&amp;lang=ru_RU&amp;scroll=true"
+          ></script>
         </div>
+        <p class="map-note">
+          Если карта загружается медленно или не&nbsp;отображается —
+          воспользуйтесь кнопками ниже.
+        </p>
+      </div>
 
+      <div class="location-cards">
         <div class="location-card reveal">
           <svg class="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
           <h3>Ресторан «Белый рояль»</h3>
           <p>Банкет начнётся в&nbsp;16:00. Адрес уточняется — актуальную точку смотрите на&nbsp;карте.</p>
           <a class="btn btn-outline" href="https://yandex.ru/maps/?text=Краснодарский%20край%2C%20Курганинск%2C%20ресторан%20Белый%20рояль" target="_blank" rel="noopener">
-            Открыть в Яндекс Картах
+            Показать на карте
           </a>
+        </div>
 
-          <hr class="divider" style="margin-block: var(--space-3);" />
-
+        <div class="location-card reveal">
           <svg class="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>
           <h3>ЗАГС города Курганинска</h3>
           <p>Церемония регистрации в&nbsp;14:30.</p>
           <a class="btn btn-outline" href="https://yandex.ru/maps/?text=ЗАГС%20Курганинск" target="_blank" rel="noopener">
-            Открыть в Яндекс Картах
+            Показать на карте
           </a>
         </div>
       </div>
-    </div>
-
-    <div class="shape-divider shape-divider--bottom" aria-hidden="true">
-      <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><polygon class="fill-dark" points="0,100 1440,0 1440,100" /></svg>
     </div>
   </section>
 
@@ -301,10 +293,6 @@
   <!-- ============ ВЕДУЩИЙ ============
        ЗАМЕНИТЕ имя и номер на настоящие контакты вашего ведущего. -->
   <section class="section section--dark" id="host">
-    <div class="shape-divider shape-divider--top" aria-hidden="true">
-      <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><polygon class="fill-dark" points="0,100 1440,0 1440,100" /></svg>
-    </div>
-
     <div class="container">
       <div class="contact-block reveal">
         <p class="eyebrow">На празднике</p>
@@ -318,12 +306,7 @@
           Дмитрий, +7 (900) 000-00-00
         </a>
       </div>
-    </div>
-
-    <div class="shape-divider shape-divider--bottom" aria-hidden="true">
-      <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><polygon class="fill-dark" points="0,100 1440,0 1440,100" /></svg>
-    </div>
-  </section>
+    </div>  </section>
 
   <!-- ============ RSVP ============ -->
   <section class="section" id="rsvp">

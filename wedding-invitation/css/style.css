@@ -275,8 +275,11 @@ textarea:focus-visible,
   background: var(--color-bg-alt);
 }
 
-/* Тёмная секция — контрастный такт в ритме страницы среди светлых блоков,
-   с фигурными (диагональными) стыками вместо ровных горизонтальных линий. */
+/* Тёмная секция — контрастный такт в ритме страницы среди светлых блоков.
+   Раньше стык оформлялся диагональным вырезом (shape-divider), но на
+   практике он либо резал слишком круто на узких экранах, либо на широких
+   превращался в тонкий "нож" — убрали, ровная граница спокойнее и
+   надёжнее на любой ширине. */
 .section--dark {
   background: var(--color-dark);
   color: var(--color-on-dark-soft);
@@ -292,40 +295,6 @@ textarea:focus-visible,
 .section--dark .contact-block h2 { color: var(--color-on-dark); }
 .section--dark .section-head p { color: var(--color-on-dark-soft); }
 .section--dark .map-note { color: var(--color-on-dark-soft); opacity: 0.8; }
-
-.shape-divider {
-  position: absolute;
-  left: 0;
-  right: 0;
-  /* Высота в vw, а не в фиксированных px — divider растягивается на всю
-     ширину экрана (100%), и с фиксированной высотой скос на узком
-     телефоне выходит вдвое круче, чем на десктопе (44px на 390px —
-     это вдвое больше по отношению, чем 84px на 1440px). vw держит угол
-     визуально одинаковым на любой ширине. */
-  height: clamp(22px, 6vw, 84px);
-  overflow: hidden;
-  line-height: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.shape-divider svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.shape-divider--top {
-  top: 0;
-  transform: translateY(-99%);
-}
-
-.shape-divider--bottom {
-  bottom: 0;
-  transform: translateY(99%);
-}
-
-.shape-divider .fill-dark { fill: var(--color-dark); }
 
 .section-head {
   max-width: 46rem;
@@ -839,17 +808,25 @@ textarea:focus-visible,
   font-weight: 600;
 }
 
-/* ---------- 9. Карта / место проведения ---------- */
-
-.location-grid {
-  display: grid;
-  gap: var(--space-6);
+/* ---------- 9. Карта / место проведения ----------
+   Карта — во всю ширину контейнера сверху (крупная, ей нужен простор),
+   а под ней — карточки локаций рядом друг с другом. Раньше карта делила
+   ширину с одной высокой карточкой (обе локации внутри неё через <hr>) —
+   на телефоне карточка вытягивалась и текст внутри жался. */
+.location-map-wrap {
+  max-width: 52rem;
+  margin-inline: auto;
+  margin-bottom: var(--space-7);
 }
 
-@media (min-width: 860px) {
-  .location-grid {
-    grid-template-columns: 1.1fr 0.9fr;
-    align-items: start;
+.location-cards {
+  display: grid;
+  gap: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  .location-cards {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -885,7 +862,7 @@ textarea:focus-visible,
 }
 
 @media (min-width: 640px) {
-  .map-embed { height: 460px; }
+  .map-embed { height: 480px; }
 }
 
 .map-embed iframe {
