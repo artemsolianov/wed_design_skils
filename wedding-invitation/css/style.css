@@ -602,13 +602,20 @@ textarea:focus-visible,
   z-index: 1;
 }
 
+/* Дата — не служебная подпись, а одна из двух главных новостей на
+   странице (когда именно, наравне с "кто"), поэтому крупная, а не
+   мелкая капитель-лейбл, какой была раньше. Трекинг снижен по сравнению
+   с исходным 0.22em — этот интервал был откалиброван под мелкий текст;
+   на крупном кегле те же 0.22em выглядели бы разреженно и хуже читались
+   (чем крупнее буквы, тем меньше нужен трекинг для капители). */
 .hero-date {
   font-family: var(--font-label);
-  font-weight: 600;
-  font-size: clamp(0.85rem, 0.5vw + 0.75rem, 1rem);
-  letter-spacing: 0.22em;
+  font-weight: 700;
+  font-size: clamp(1.35rem, 3.6vw + 0.75rem, 2.5rem);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--color-gold);
+  line-height: 1.25;
 }
 
 .hero h1 {
