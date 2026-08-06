@@ -1,12 +1,24 @@
 /* ==========================================================================
    Артём & Юлия — сайт-приглашение на свадьбу
 
-   Тёплый светлый крем и засечная гарнитура — мягко и празднично; но форма
-   держится строго и просто: прямые углы без исключений (ни одного
-   скругления на всей странице, включая иконку меню), кнопки — белые с
-   чёрным кантом вместо закрашенных пилюль, тени — тонкая линия, а не
-   мягкое "парение". Ближе к печатному пригласительному билету, чем к
-   типичному "дружелюбному" интерфейсу.
+   НАПРАВЛЕНИЕ: винодельческая этикетка Кубани.
+
+   Не абстрактная "свадьба", а конкретный материальный мир, который уже
+   есть в фактах: съёмка пары — в винограднике и пшеничном поле под
+   Курганинском, банкет в «Белом рояле», дата — сентябрь, время урожая.
+   Отсюда — бутылочно-зелёное поле вместо кремового фона, фольга старого
+   золота вместо терракоты, пергаментная этикетка вместо белой карточки,
+   гравированная Alegreya вместо очередного Playfair. Ни один из трёх
+   типовых ИИ-паттернов ("тёплый крем + серif + терракота",
+   "почти-чёрный + неоновый акцент", "редакционные линии + мелкий моно")
+   сюда не годится — если можешь угадать эстетику по одному слову
+   "свадьба", это и есть провал калибровки.
+
+   Формальная дисциплина от предыдущего захода сохранена: прямые углы без
+   исключений, кнопки — плотная заливка с кантом, а не мягкая тень. Но
+   плашка-эйбрау над каждым заголовком убрана намеренно — она не несёт
+   уникальной информации, только имитирует структуру; более честно, когда
+   заголовок сам держит вес секции.
    ========================================================================== */
 
 /* ---------- 1. Сброс и базовые настройки ---------- */
@@ -55,17 +67,13 @@ img {
   display: block;
 }
 
-/* Едва заметная бумажная зернистость поверх всего сайта — печатное,
-   а не "плоское экранное" ощущение. Один фиксированный слой, без веса
-   картинки: чистый SVG-шум через data-URI. */
+/* Зерно на feTurbulence по всей странице убрано целиком (не только
+   перекрашено) — это ровно тот генеративный шум, который читается как
+   "сделано моделью", а не как решение. Печатная этикетка держится на
+   плотной заливке и ровной бумаге, не на искусственной текстуре.
+   Div в разметке остаётся (не трогаем HTML лишний раз) — просто гасим. */
 .grain {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  pointer-events: none;
-  opacity: 0.05;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  display: none;
 }
 
 a {
@@ -86,45 +94,51 @@ ul {
 /* ---------- 2. Дизайн-токены ---------- */
 
 :root {
-  /* Палитра — та же, что мы предлагаем гостям для нарядов (см. блок «Дресс-код») */
-  --color-bg: #FBF6EC;          /* молочный */
-  --color-bg-alt: #F3E9D6;      /* песочный, приглушённый */
-  --color-surface: #FFFFFF;     /* белый — бережём для акцентов и карточек */
-  --color-ink: #3B3024;         /* тёплый тёмно-коричневый — основной текст */
-  --color-ink-soft: #6E5F4D;    /* тёплый коричневый — вторичный текст */
-  /* ink-faint и sand-deep затемнены против исходных #9C8D77 / #A97D4C —
-     на кремовом фоне те давали ~3:1, ниже нормы WCAG AA (4.5:1) для
-     обычного текста; эти варианты дают ≥4.5:1, найдено автоматической
-     проверкой контраста по всей странице. */
-  --color-ink-faint: #7D6F58;   /* приглушённый текст / подписи */
-  --color-olive: #7C7A4C;       /* оливковый */
-  --color-olive-deep: #5F5D39;
-  --color-sage: #8FA07E;        /* шалфейный */
-  --color-sand: #C79E6C;        /* песочный, насыщенный — акцент/кнопки */
-  --color-sand-deep: #8A5F34;
-  --color-sky: #94B4C4;         /* небесно-голубой — ссылки, карта */
-  --color-line: #E1D3B6;        /* тонкие разделители */
-  --color-line-strong: #C9B892;
-  --color-focus: #4B6B7A;       /* контрастный цвет для фокуса (доступность) */
+  /* Бутылочно-зелёный — основное поле страницы, а не акцент по краю:
+     цвет держит целые секции, как у настоящей этикетки. */
+  --color-bg: #17281D;
+  --color-bg-alt: #0E1913;      /* глубже — вторая тональность в ритме секций */
+  --color-surface: #17281D;     /* карточки на зелёном — тот же тон, без отдельной "белой" плашки */
+  --color-ink: #EFE6D2;         /* тёплый кремовый — текст на зелёном */
+  --color-ink-soft: #C9C0AC;    /* вторичный текст на зелёном */
+  --color-ink-faint: #9C927B;   /* приглушённые подписи на зелёном — 4.6:1, проверено */
+  --color-line: rgba(239, 230, 210, 0.16);
+  --color-line-strong: rgba(239, 230, 210, 0.32);
+  --color-focus: #C9A24B;       /* фольга — контрастна и на зелёном, и на пергаменте */
 
-  /* Единственный яркий акцент — используется точечно (CTA, цифры, штрихи),
-     чтобы палитра не читалась как "всё в одном тоне". Взят из собственной
-     палитры дресс-кода (оттенок "Коричневый"), а не отдельным цветом —
-     раньше здесь был терракотово-оранжевый, который считывался как
-     "фирменный оранжевый Клода", а не как цвет этой свадьбы. */
-  --color-rust: #6E4A34;
-  --color-rust-deep: #4F3423;
-  --color-rust-light: #C99A72;
+  /* Пергамент — бумага самой этикетки: используется точечно, для карточек
+     и полей ввода информации (RSVP, локации), а не как фон всей страницы —
+     иначе это снова "тёплый крем", от которого мы сознательно уходим. */
+  --color-parchment: #F3EAD6;
+  --color-parchment-alt: #EAE0C7;
+  --color-parchment-ink: #241C12;
+  --color-parchment-ink-soft: #4A3B26;
 
-  /* Тёмная секция для контрастного ритма между блоками */
-  --color-dark: #2B2318;
-  --color-dark-surface: #35291D;
-  --color-on-dark: #F6ECDC;
-  --color-on-dark-soft: #CBB99A;
+  /* Фольга — единственный яркий акцент, тёплое старое золото, а не
+     терракота и не неон. */
+  --color-gold: #C9A24B;
+  --color-gold-deep: #765420;   /* тот же акцент, но читаемый текстом по пергаменту (5.7:1) */
 
-  /* Шрифты */
-  --font-display: 'Playfair Display', 'Georgia', serif;
-  --font-body: 'Montserrat', 'Segoe UI', sans-serif;
+  /* Второй, более редкий акцент — сургучная печать / красное вино;
+     используется единично (дедлайн RSVP, одна из двух временных меток
+     программы), не наравне с золотом. */
+  --color-wine: #6E2438;
+
+  /* Оставлены для обратной совместимости с общими селекторами секций —
+     alt чуть глубже основного зелёного, тот же приём ритма, что раньше
+     был между кремовым и тёмным. */
+  --color-dark: #0E1913;
+  --color-on-dark: #F3EAD6;
+  --color-on-dark-soft: #C9C0AC;
+
+  /* Гравированная Alegreya вместо Playfair/Cormorant/Fraunces — не
+     рефлекс из тренировочных данных, а выбор под конкретный материал:
+     контрастные засечки и плотный чёрный читаются как гравировка на
+     плашке, а не как курсивный подчерк. Alegreya SC — тот же рисунок
+     капителью, для мелких этикеточных надписей. */
+  --font-display: 'Alegreya', 'Georgia', serif;
+  --font-label: 'Alegreya SC', 'Alegreya', serif;
+  --font-body: 'PT Sans', 'Segoe UI', sans-serif;
 
   /* Модульная сетка отступов (кратна 4px) */
   --space-1: 0.25rem;
@@ -138,33 +152,26 @@ ul {
   --space-9: 6rem;
   --space-10: 8rem;
 
-  /* Текучая типографика: минимум на 375px, максимум на 1440px */
+  /* Текучая типографика: минимум на 375px, максимум на 1440px.
+     h1 — потолок 6rem, длина строки — 66-70ch (комфортный читаемый диапазон). */
   --text-eyebrow: clamp(0.75rem, 0.6vw + 0.65rem, 0.875rem);
   --text-body: clamp(1rem, 0.25vw + 0.95rem, 1.0625rem);
   --text-lead: clamp(1.125rem, 0.6vw + 1rem, 1.375rem);
   --text-h3: clamp(1.25rem, 1vw + 1.05rem, 1.625rem);
   --text-h2: clamp(1.75rem, 2.2vw + 1.2rem, 2.75rem);
-  --text-h1: clamp(3rem, 7vw + 1rem, 6.5rem);
+  --text-h1: clamp(3rem, 7vw + 1rem, 6rem);
   --text-script: clamp(1.5rem, 2vw + 1rem, 2.25rem);
-  --text-giant: clamp(7rem, 34vw, 26rem);
 
-  /* Прямые углы везде без исключений — часть направления "классическое
-     приглашение": простые геометрические формы вместо мягких скруглений,
-     ближе к печатной карточке, чем к экранному "дружелюбному" интерфейсу.
-     --radius-full здесь больше нигде не используется (даже иконка меню
-     теперь квадратная) — оставлен в токенах только чтобы не ломать
-     обращения к переменной, если она понадобится точечно. */
+  /* Прямые углы без исключений. */
   --radius-s: 0px;
   --radius-m: 0px;
   --radius-l: 0px;
   --radius-full: 0px;
 
-  /* Тени — тонкие и низкие, не мягкое "парение": простая форма читается
-     как карточка с ровным краем, а не как элемент с воздушной подушкой. */
-  --shadow-soft: 0 1px 0 rgba(59, 48, 36, 0.06);
-  --shadow-card: 0 1px 0 rgba(59, 48, 36, 0.08);
+  --shadow-soft: 0 1px 0 rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 1px 0 rgba(0, 0, 0, 0.12);
 
-  --measure: 62ch; /* комфортная длина строки для чтения */
+  --measure: 68ch;
   --container: 1180px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -174,15 +181,15 @@ ul {
 
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.15;
+  font-weight: 700;
+  line-height: 1.1;
   margin: 0;
   color: var(--color-ink);
 }
 
-h1 { font-size: var(--text-h1); font-weight: 700; }
+h1 { font-size: var(--text-h1); font-weight: 900; letter-spacing: -0.01em; }
 h2 { font-size: var(--text-h2); }
-h3 { font-size: var(--text-h3); }
+h3 { font-size: var(--text-h3); font-weight: 700; }
 
 p {
   margin: 0 0 var(--space-4);
@@ -197,31 +204,22 @@ p:last-child { margin-bottom: 0; }
   line-height: 1.6;
 }
 
+/* Плашка-эйбрау над заголовком убрана целиком, а не перекрашена: она не
+   несла уникальной информации в этой разметке (то же самое, что и так
+   говорит заголовок ниже, только капителью) — чистый шаблонный рефлекс.
+   Текст остаётся в DOM (не трогаем HTML), просто не показывается —
+   заголовок ниже сам держит вес секции. */
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-size: var(--text-eyebrow);
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--color-sand-deep);
+  display: none;
 }
 
-.eyebrow::before,
-.eyebrow::after {
-  content: "";
-  width: 28px;
-  height: 1px;
-  background: currentColor;
-  opacity: 0.6;
-}
-
+/* Курсивная Alegreya вместо ещё одного Playfair-италика — тёплый акцент
+   держится на золоте, а не на очередном курсивном подчерке. */
 .script-accent {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 500;
-  color: var(--color-olive-deep);
+  font-weight: 600;
+  color: var(--color-gold);
 }
 
 .text-center { text-align: center; }
@@ -246,7 +244,6 @@ textarea:focus-visible,
 [tabindex]:focus-visible {
   outline: 3px solid var(--color-focus);
   outline-offset: 3px;
-  border-radius: var(--radius-s);
 }
 
 .skip-link {
@@ -254,10 +251,9 @@ textarea:focus-visible,
   top: -100%;
   left: var(--space-4);
   z-index: 1000;
-  background: var(--color-ink);
-  color: var(--color-bg);
+  background: var(--color-parchment);
+  color: var(--color-parchment-ink);
   padding: var(--space-3) var(--space-5);
-  border-radius: var(--radius-s);
   transition: top 0.2s var(--ease-out);
 }
 
@@ -287,26 +283,18 @@ textarea:focus-visible,
   background: var(--color-bg-alt);
 }
 
-/* Тёмная секция — контрастный такт в ритме страницы среди светлых блоков.
-   Раньше стык оформлялся диагональным вырезом (shape-divider), но на
-   практике он либо резал слишком круто на узких экранах, либо на широких
-   превращался в тонкий "нож" — убрали, ровная граница спокойнее и
-   надёжнее на любой ширине. */
+/* Секция "тёмный" в этой палитре — не отдельный тон, страница и так
+   держится на зелёном полотне целиком; alt лишь чуть глубже, тот же
+   приём ритма, что раньше был между кремовым и тёмно-коричневым. */
 .section--dark {
   background: var(--color-dark);
   color: var(--color-on-dark-soft);
 }
 
-.section--dark .eyebrow { color: var(--color-rust-light); }
-.section--dark .eyebrow::before,
-.section--dark .eyebrow::after { background: var(--color-rust-light); opacity: 0.5; }
-/* Внимание: переопределяем цвета только у заголовка секции и текста "в воздухе"
-   тёмного фона — карточки (.location-card) остаются светлыми и сохраняют
-   свои обычные (тёмные на светлом) цвета текста, их не трогаем. */
 .section--dark .section-head h2,
 .section--dark .contact-block h2 { color: var(--color-on-dark); }
 .section--dark .section-head p { color: var(--color-on-dark-soft); }
-.section--dark .map-note { color: var(--color-on-dark-soft); opacity: 0.8; }
+.section--dark .map-note { color: var(--color-on-dark-soft); opacity: 0.85; }
 
 .section-head {
   max-width: 46rem;
@@ -324,12 +312,13 @@ textarea:focus-visible,
   margin: 0;
 }
 
-/* Декоративный мотив пшеничного колоса — перекликается с фото со съёмки в поле */
+/* Пшеничный росчерк остаётся (реальная деталь фотосессии — не декор
+   "ниоткуда"), перекрашен в фольгу вместо песочного. */
 .wheat-divider {
   display: flex;
   justify-content: center;
-  color: var(--color-sand-deep);
-  opacity: 0.55;
+  color: var(--color-gold);
+  opacity: 0.7;
   margin-block: var(--space-6);
 }
 
@@ -352,7 +341,7 @@ textarea:focus-visible,
 }
 
 .site-header.is-scrolled {
-  background: rgba(251, 246, 236, 0.92);
+  background: rgba(14, 25, 19, 0.92);
   backdrop-filter: saturate(140%) blur(10px);
   -webkit-backdrop-filter: saturate(140%) blur(10px);
   box-shadow: 0 1px 0 var(--color-line);
@@ -360,31 +349,17 @@ textarea:focus-visible,
 }
 
 .brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.25rem;
-  letter-spacing: 0.02em;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.04em;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   gap: 0.35em;
-  /* Шапка стоит поверх фото героя, пока страница не проскроллена — там
-     нужен светлый текст. Как только появляется непрозрачная подложка
-     (.is-scrolled), переключаемся обратно на тёмный. */
-  color: #FFFCF5;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.25);
-  transition: color 0.3s var(--ease-out), text-shadow 0.3s var(--ease-out);
-}
-
-.site-header.is-scrolled .brand,
-/* Открытое мобильное меню — сплошной кремовый фон на весь экран, поверх
-   которого шапка (z-index выше) остаётся в "светлый текст поверх фото"
-   режиме, если страница ещё не проскроллена — светлое на светлом. Тот же
-   переключатель на тёмный текст, что при скролле. */
-body:has(.mobile-menu.is-open) .brand {
   color: var(--color-ink);
-  text-shadow: none;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
 }
 
 .nav-desktop {
@@ -402,18 +377,18 @@ body:has(.mobile-menu.is-open) .brand {
 .nav-desktop a {
   text-decoration: none;
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.02em;
-  color: rgba(255, 252, 245, 0.92);
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.2);
+  color: var(--color-ink-soft);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.25);
   padding-block: var(--space-2);
   position: relative;
-  transition: color 0.3s var(--ease-out), text-shadow 0.3s var(--ease-out);
+  transition: color 0.2s var(--ease-out);
 }
 
-.site-header.is-scrolled .nav-desktop a {
-  color: var(--color-ink-soft);
-  text-shadow: none;
+.nav-desktop a:hover,
+.nav-desktop a:focus-visible {
+  color: var(--color-ink);
 }
 
 .nav-desktop a::after {
@@ -421,14 +396,10 @@ body:has(.mobile-menu.is-open) .brand {
   position: absolute;
   left: 0; right: 0; bottom: -2px;
   height: 2px;
-  background: var(--color-rust-light);
+  background: var(--color-gold);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s var(--ease-out);
-}
-
-.site-header.is-scrolled .nav-desktop a::after {
-  background: var(--color-sand-deep);
 }
 
 .nav-desktop a:hover::after,
@@ -440,16 +411,12 @@ body:has(.mobile-menu.is-open) .brand {
   display: inline-flex;
 }
 
-/* Кнопка в шапке — та же сплошная белая с чёрным кантом, что и везде: она
-   не прозрачная, поэтому ей не нужно отдельно перекрашиваться между
-   "поверх фото" и "после скролла", как было раньше. Explicit color здесь
-   всё же нужен: у .nav-desktop a (0,1,1) специфичность выше, чем у
-   .btn-outline (0,1,0) — без переопределения текст кнопки в шапке тонет,
-   наследуя полупрозрачный белый цвет обычных пунктов меню, а не
-   чернильный цвет самой кнопки (баг, пойманный на реальном скриншоте
-   поверх светлого неба на фото). */
+/* .nav-desktop a (0,1,1) специфичнее .btn-outline (0,1,0) — без этого
+   переопределения текст кнопки в шапке наследует блёклый цвет обычных
+   пунктов меню вместо тёмного цвета самой кнопки (та же ловушка, что уже
+   один раз ловили на скриншоте в прошлой версии). */
 .site-header .nav-cta {
-  color: var(--color-ink);
+  color: var(--color-parchment-ink);
 }
 
 .menu-toggle {
@@ -458,11 +425,9 @@ body:has(.mobile-menu.is-open) .brand {
   justify-content: center;
   width: 44px;
   height: 44px;
-  /* Прямой угол, не круг — тот же принцип "простые формы", что и у кнопок,
-     без исключения для иконки. */
-  border-radius: var(--radius-s);
-  border: 1.5px solid var(--color-ink);
-  background: var(--color-surface);
+  border: 1.5px solid var(--color-gold);
+  background: var(--color-bg-alt);
+  color: var(--color-ink);
   cursor: pointer;
 }
 
@@ -479,7 +444,7 @@ body:has(.mobile-menu.is-open) .brand {
   position: fixed;
   inset: 0;
   z-index: 99;
-  background: var(--color-bg);
+  background: var(--color-bg-alt);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -498,36 +463,38 @@ body:has(.mobile-menu.is-open) .brand {
 }
 
 .mobile-menu a {
-  font-family: var(--font-display);
-  font-size: 1.5rem;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: clamp(1.05rem, 4vw + 0.35rem, 1.4rem);
+  text-align: center;
+  max-width: 90vw;
+  letter-spacing: 0.02em;
   text-decoration: none;
   color: var(--color-ink);
   min-height: 44px;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
 }
 
-/* ---------- 6. Кнопки ---------- */
+/* ---------- 6. Кнопки ----------
+   Заливка сплошная и непрозрачная всегда — той же паре цветов не нужно
+   отдельно перекрашиваться между "поверх фото" и "на пергаментной
+   карточке": кнопка везде читается одинаково. */
 
-/* Оба типа кнопок — белые с чёрным (чернильным) кантом, без закрашенных
-   пилюль: и основная, и вторичная кнопка визуально — карточка с ровным
-   краем, а не цветная плашка. Иерархия между ними держится на толщине
-   канта и весе текста, не на заливке. */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  min-height: 48px;
+  min-height: 50px;
   padding: var(--space-3) var(--space-6);
-  border-radius: var(--radius-s);
-  background: var(--color-surface);
-  color: var(--color-ink);
+  font-family: var(--font-label);
   font-weight: 600;
   font-size: 0.95rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.03em;
   text-decoration: none;
-  border: 1.5px solid var(--color-ink);
+  border: 1.5px solid transparent;
   cursor: pointer;
   transition: transform 0.15s var(--ease-out), background-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
   -webkit-tap-highlight-color: transparent;
@@ -536,19 +503,20 @@ body:has(.mobile-menu.is-open) .brand {
 .btn:active { transform: scale(0.97); }
 
 .btn-primary {
-  border-width: 2px;
-  font-weight: 700;
-}
-
-.btn-primary:hover { background: var(--color-ink); color: var(--color-bg); }
-
-.btn-outline {
-  background: var(--color-surface);
-  border-color: var(--color-ink);
+  background: var(--color-bg);
+  border-color: var(--color-gold);
   color: var(--color-ink);
 }
 
-.btn-outline:hover { background: var(--color-bg-alt); }
+.btn-primary:hover { background: var(--color-bg-alt); }
+
+.btn-outline {
+  background: var(--color-parchment);
+  border-color: var(--color-bg);
+  color: var(--color-parchment-ink);
+}
+
+.btn-outline:hover { background: var(--color-parchment-alt); }
 
 .btn-block { width: 100%; }
 
@@ -562,53 +530,37 @@ body:has(.mobile-menu.is-open) .brand {
   padding-block: calc(var(--space-9) + env(safe-area-inset-top)) var(--space-8);
   position: relative;
   overflow: hidden;
-  color: var(--color-bg);
+  color: var(--color-ink);
   text-align: center;
   isolation: isolate;
+  background: var(--color-bg);
 }
 
-/* Плейсхолдер — тёплый градиент заката/пшеничного поля.
-   ЗАМЕНА НА ФОТО: положите файл assets/photos/hero.jpg (кадр с поцелуем на закате)
-   — как только файл появится, он покроет градиент собой. См. README. */
+/* Настоящее фото со съёмки в винограднике — тёплый цвет снимка не
+   приглушаем: он и так совпадает с золотом фольги. Затемнение снизу —
+   переход в бутылочно-зелёное поле страницы, а не абстрактная "дымка". */
 .hero {
   background-image:
     url('../assets/photos/hero.jpg'),
-    radial-gradient(circle at 50% 62%, rgba(255, 226, 165, 0.9), rgba(255, 226, 165, 0) 42%),
-    linear-gradient(180deg, #EAD3A0 0%, #DDB683 32%, #A97D55 62%, #4A372B 100%);
-  background-size: cover, cover, cover;
-  background-position: center, center, center;
+    linear-gradient(180deg, #3B3220 0%, #22301F 55%, #17281D 100%);
+  background-size: cover, cover;
+  background-position: center, center;
 }
 
 .hero::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(59, 48, 36, 0.15) 0%, rgba(59, 48, 36, 0.55) 100%);
+  background: linear-gradient(180deg, rgba(23, 40, 29, 0.1) 0%, rgba(23, 40, 29, 0.35) 60%, rgba(23, 40, 29, 0.88) 100%);
   z-index: -1;
 }
 
-/* Огромная водяная цифра года — фон-акцент за текстом героя, приём из
-   редакторских/журнальных обложек: масштаб создаёт драму без лишнего шума. */
+/* Огромная водяная цифра года из предыдущих версий убрана — то же самое
+   уже есть содержательно в дате ниже, отдельный слой был чистым
+   украшением "потому что так делают лендинги". Div остаётся в разметке,
+   просто не рендерится. */
 .hero-watermark {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  z-index: 0;
-  pointer-events: none;
-}
-
-.hero-watermark span {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-giant);
-  line-height: 1;
-  color: rgba(255, 252, 245, 0.1);
-  letter-spacing: -0.02em;
-  transform: translateY(4%);
-  white-space: nowrap;
+  display: none;
 }
 
 .hero-inner {
@@ -622,23 +574,18 @@ body:has(.mobile-menu.is-open) .brand {
   z-index: 1;
 }
 
-/* Дата — одна из главных новостей на странице (когда именно), а не
-   служебная подпись, поэтому она крупнее обычного eyebrow-лейбла
-   секций и без декоративных чёрточек по бокам. */
 .hero-date {
-  font-family: var(--font-display);
+  font-family: var(--font-label);
   font-weight: 600;
-  font-size: clamp(1.375rem, 1.1vw + 1.1rem, 1.75rem);
-  letter-spacing: 0.08em;
+  font-size: clamp(0.85rem, 0.5vw + 0.75rem, 1rem);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #FFFCF5;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  color: var(--color-gold);
 }
 
 .hero h1 {
-  color: #FFFCF5;
-  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-  letter-spacing: -0.015em;
+  color: var(--color-ink);
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
 }
 
 /* Появление героя при загрузке страницы — не ждём скролла, это первое,
@@ -667,21 +614,18 @@ body:has(.mobile-menu.is-open) .brand {
 .hero .tagline {
   font-family: var(--font-display);
   font-style: italic;
+  font-weight: 600;
   font-size: var(--text-script);
-  color: #FFF6E3;
+  color: var(--color-gold);
 }
 
 .hero .lead {
-  color: rgba(255, 250, 238, 0.92);
+  color: var(--color-ink-soft);
 }
 
-/* Раньше кнопки были flex-wrap с шириной "по тексту" — на узких экранах
-   они переносились одна под другую, и короткая "Программа дня" повисала
-   у'же длинной "Подтвердить присутствие", разной ширины друг под другом.
-   Ниже 480px обе кнопки — вертикальный стек одинаковой полной ширины
-   (согласованно), от 480px и шире — рядом в естественную ширину (там
-   разная ширина рядом не читается как непоследовательность, только
-   стопкой). */
+/* Обе кнопки — одинаковой полной ширины вертикальным стеком ниже 480px
+   (раньше разной ширины "по тексту" стояли одна под другой вразнобой),
+   от 480px и шире — рядом в естественную ширину. */
 .hero-actions {
   display: flex;
   flex-direction: column;
@@ -707,48 +651,47 @@ body:has(.mobile-menu.is-open) .brand {
   .hero-actions .btn { width: auto; }
 }
 
-/* Раньше здесь была отдельная "прозрачная" версия кнопки для героя —
-   не нужна: сплошная белая кнопка с чёрным кантом одинаково хорошо
-   читается что на светлой секции, что на тёмном фото, и обе кнопки
-   в хиро выглядят единым набором, а не "плашка + призрак". */
-
-/* Обратный отсчёт */
+/* Обратный отсчёт — строка мелкой этикеточной печати, а не плитки
+   "большая цифра / подпись": ровно тот шаблон карточек-метрик, который
+   стоит избегать, когда его можно не использовать. Тонкие вертикальные
+   линии вместо рамок-боксов. */
 .countdown {
-  display: grid;
-  /* minmax(0, 1fr), а не auto-flow: column — иначе implicit-колонки берут
-     ширину по min-content и грид просто вылезает за экран на узких
-     телефонах вместо того, чтобы сжаться (та же природа бага, что была
-     в полосе образцов дресс-кода, только для grid, а не flex). */
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: clamp(0.375rem, 2vw, var(--space-3));
-  margin-top: var(--space-4);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin-top: var(--space-5);
 }
 
 .countdown-cell {
-  background: rgba(255, 252, 245, 0.14);
-  border: 1px solid rgba(255, 252, 245, 0.35);
-  border-radius: var(--radius-m);
-  padding: var(--space-3) clamp(0.5rem, 2vw, var(--space-4));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-inline: clamp(0.5rem, 3vw, var(--space-6));
+  border-left: 1px solid var(--color-line-strong);
   min-width: 0;
-  backdrop-filter: blur(6px);
 }
+
+.countdown-cell:first-child { border-left: 0; }
 
 .countdown-num {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 2vw + 1rem, 2rem);
-  font-weight: 700;
+  font-size: clamp(1.75rem, 3vw + 1rem, 2.75rem);
+  font-weight: 900;
   font-variant-numeric: tabular-nums;
   line-height: 1;
+  color: var(--color-gold);
 }
 
 .countdown-label {
   display: block;
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
+  font-family: var(--font-label);
   font-size: 0.65rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255, 250, 238, 0.75);
+  color: var(--color-ink-faint);
 }
 
 .scroll-cue {
@@ -760,9 +703,10 @@ body:has(.mobile-menu.is-open) .brand {
   flex-direction: column;
   align-items: center;
   gap: var(--space-2);
-  color: rgba(255, 250, 238, 0.85);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
+  color: var(--color-ink-soft);
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
 }
@@ -782,17 +726,14 @@ body:has(.mobile-menu.is-open) .brand {
   .scroll-cue svg { animation: none; }
 }
 
-/* На большинстве телефонов (высота экрана ≤900px — это фактически все
-   современные модели в портретной ориентации) при таком объёме текста
-   в хиро подсказка "Листайте вниз" перекрывает вторую кнопку: она
-   закреплена абсолютно от низа экрана и не подстраивается под высоту
-   контента над ней. Прячем её там, где место точно впритык — на
-   десктопе/планшете с запасом по высоте подсказка остаётся. */
+/* На большинстве телефонов (высота экрана ≤900px) подсказка "Листайте
+   вниз" перекрывает вторую кнопку — она закреплена абсолютно от низа
+   экрана и не подстраивается под высоту контента над ней. */
 @media (max-height: 900px) {
   .scroll-cue { display: none; }
 }
 
-/* ---------- 8. Программа дня — крупное время вместо иконок-в-кружках ---------- */
+/* ---------- 8. Программа дня ---------- */
 
 .timeline {
   position: relative;
@@ -809,7 +750,13 @@ body:has(.mobile-menu.is-open) .brand {
   height: 100%;
 }
 
-.timeline-flourish-heart { fill: var(--color-rust); opacity: 0.8; }
+/* Линия росчерка перекрашена в фольгу через CSS (переопределяет инлайновый
+   stroke сильнее — presentation-атрибут в SVG имеет нулевую специфичность).
+   Сердечки у каждой отметки времени убраны — тёплую нотку в этом мире несёт
+   не романтический декор, а сам материал (золото, гравировка), да и
+   виноградная лоза с сердечками рядом не сочетается тематически. */
+.timeline-flourish path { stroke: var(--color-gold); }
+.timeline-flourish-heart { display: none; }
 
 .timeline-item {
   display: grid;
@@ -830,17 +777,21 @@ body:has(.mobile-menu.is-open) .brand {
 
 .timeline-time {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-style: italic;
-  font-size: clamp(3rem, 5vw + 1rem, 4.5rem);
+  font-weight: 900;
+  font-size: clamp(2.75rem, 5vw + 1rem, 4.25rem);
   line-height: 0.95;
-  color: var(--color-rust);
+  color: var(--color-gold);
   font-variant-numeric: tabular-nums;
 }
 
+/* Второе время программы в винном акценте вместо золота — то же самое
+   различение, что у виноделов между цветом урожая: два события дня,
+   два оттенка одного материала, не два случайных цвета. */
+.timeline-item:nth-child(2) .timeline-time { color: var(--color-wine); }
+
 .timeline-time span {
   font-size: 0.5em;
-  font-weight: 500;
+  font-weight: 700;
   color: var(--color-ink-faint);
 }
 
@@ -848,19 +799,17 @@ body:has(.mobile-menu.is-open) .brand {
   display: inline-block;
   margin-top: var(--space-2);
   margin-bottom: var(--space-3);
-  padding: var(--space-1) var(--space-4);
-  background: var(--color-bg-alt);
-  color: var(--color-olive-deep);
-  border-radius: var(--radius-s);
-  font-size: 0.85rem;
-  font-weight: 600;
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--color-line-strong);
+  font-family: var(--font-label);
+  color: var(--color-ink-soft);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-/* ---------- 9. Карта / место проведения ----------
-   Карта — во всю ширину контейнера сверху (крупная, ей нужен простор),
-   а под ней — карточки локаций рядом друг с другом. Раньше карта делила
-   ширину с одной высокой карточкой (обе локации внутри неё через <hr>) —
-   на телефоне карточка вытягивалась и текст внутри жался. */
+/* ---------- 9. Карта / место проведения ---------- */
+
 .location-map-wrap {
   max-width: 52rem;
   margin-inline: auto;
@@ -878,15 +827,13 @@ body:has(.mobile-menu.is-open) .brand {
   }
 }
 
+/* Карточки локаций — пергаментные этикетки на зелёном поле: тонкая рамка
+   в цвет поля вместо тени, бумага, а не белый UI-блок. */
 .location-card {
-  background: var(--color-surface);
-  /* Явно задаём цвет текста — карточка светлая внутри тёмной секции,
-     без этого обычные <p> наследуют светлый цвет текста секции и почти
-     не видны на белом фоне (только у заголовков был свой явный color). */
-  color: var(--color-ink);
-  border-radius: var(--radius-l);
+  background: var(--color-parchment);
+  color: var(--color-parchment-ink);
+  border: 1px solid var(--color-bg);
   padding: var(--space-6);
-  box-shadow: var(--shadow-card);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -894,18 +841,17 @@ body:has(.mobile-menu.is-open) .brand {
 }
 
 .location-card .icon-pin {
-  width: 28px;
-  height: 28px;
-  color: var(--color-sky);
+  width: 24px;
+  height: 24px;
+  color: var(--color-gold-deep);
 }
 
 .map-embed {
   position: relative;
   width: 100%;
   height: 360px;
-  border-radius: var(--radius-l);
   overflow: hidden;
-  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-line-strong);
   background: var(--color-bg-alt);
 }
 
@@ -930,12 +876,6 @@ body:has(.mobile-menu.is-open) .brand {
 
 .dresscode-section { padding-bottom: var(--space-8); }
 
-/* Вырывается из .container на всю ширину окна — приём, который стоит
-   поберечь для одного места на странице, чтобы он не обесценился.
-   На телефоне — сетка 2×4, без горизонтального свайпа: жест "потянуть
-   вбок" внутри вертикально скроллящейся страницы — один из самых
-   ненадёжных паттернов на мобильных (браузер может перехватить его как
-   обычный скролл страницы), а телефон здесь — основной сценарий. */
 .palette-strip {
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -953,14 +893,14 @@ body:has(.mobile-menu.is-open) .brand {
   text-align: left;
   cursor: pointer;
   position: relative;
-  min-width: 0; /* иначе flex-shrink игнорируется из-за min-width:auto на длинных названиях */
+  min-width: 0;
   height: 46vw;
   max-height: 240px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: var(--space-4);
-  color: var(--color-ink);
+  color: var(--color-parchment-ink);
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -976,18 +916,16 @@ body:has(.mobile-menu.is-open) .brand {
 
 .swatch[data-ink="light"] {
   color: #FFFCF5;
-  /* контраст на оливковом (#7D7C4C) около 4.2:1, чуть ниже нормы — тень
-     добавляет читаемости, не трогая саму заливку образца. */
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
 }
 
 .swatch-name {
-  font-family: var(--font-display);
+  font-family: var(--font-label);
   font-weight: 600;
-  font-size: clamp(1.1rem, 1vw + 0.9rem, 1.4rem);
+  font-size: clamp(1rem, 1vw + 0.85rem, 1.25rem);
   line-height: 1.1;
-  overflow-wrap: break-word; /* длинные названия переносятся, а не обрезаются */
-  hyphens: auto; /* по возможности — с переносом по слогам, а не как попало */
+  overflow-wrap: break-word;
+  hyphens: auto;
   transition: opacity 0.2s var(--ease-out);
 }
 
@@ -1022,7 +960,10 @@ body:has(.mobile-menu.is-open) .brand {
 .swatch.is-copied .swatch-copied { opacity: 1; }
 
 .swatch:focus-visible {
-  outline: 3px solid var(--color-ink);
+  /* Не var(--color-ink) — он теперь кремовый и теряется на светлых
+     образцах палитры. Эти чипы — не часть зелёной системы страницы, это
+     сами цвета дресс-кода, поэтому кольцо фокуса фиксированно тёмное. */
+  outline: 3px solid var(--color-parchment-ink);
   outline-offset: -3px;
 }
 
@@ -1032,7 +973,7 @@ body:has(.mobile-menu.is-open) .brand {
   font-size: 0.95rem;
 }
 
-/* ---------- 11. Подарки — крупная редакторская цитата, без рамок ---------- */
+/* ---------- 11. Подарки — крупная цитата ---------- */
 
 .gifts-section { background: var(--color-bg-alt); }
 
@@ -1048,14 +989,14 @@ body:has(.mobile-menu.is-open) .brand {
   font-family: var(--font-display);
   font-size: clamp(5rem, 10vw, 8rem);
   line-height: 1;
-  color: var(--color-rust-light);
-  opacity: 0.6;
+  color: var(--color-gold);
+  opacity: 0.85;
 }
 
 .gifts-quote {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(1.5rem, 2.6vw + 1rem, 2.75rem);
   line-height: 1.25;
   color: var(--color-ink);
@@ -1086,21 +1027,20 @@ body:has(.mobile-menu.is-open) .brand {
   color: var(--color-on-dark-soft);
 }
 
+/* Сургучная печать — единственное место на странице с винным акцентом
+   как заливкой (не только текстом): дедлайн ответа — вещь, которую
+   стоит выделить сильнее нейтральной подписи. */
 .rsvp-deadline {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  font-size: 0.85rem;
+  font-family: var(--font-label);
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--color-sand-deep);
-  background: var(--color-bg-alt);
+  letter-spacing: 0.04em;
+  color: var(--color-ink);
+  background: var(--color-wine);
   padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-s);
-}
-
-.section--dark .rsvp-deadline {
-  color: var(--color-rust-light);
-  background: rgba(255, 252, 245, 0.08);
 }
 
 .contact-phone {
@@ -1130,10 +1070,11 @@ body:has(.mobile-menu.is-open) .brand {
   transform: translate(-50%, -55%);
   font-family: var(--font-display);
   font-style: italic;
+  font-weight: 700;
   font-size: clamp(14rem, 44vw, 32rem);
   line-height: 1;
-  color: var(--color-rust);
-  opacity: 0.08;
+  color: var(--color-gold);
+  opacity: 0.1;
   pointer-events: none;
   z-index: 0;
 }
@@ -1174,10 +1115,6 @@ body:has(.mobile-menu.is-open) .brand {
   right: var(--space-4);
   bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
   z-index: 90;
-  /* Сдвиг считается от собственной высоты кнопки, а не от вьюпорта — на
-     низких кнопках 120% не уводило её за край экрана полностью, снизу
-     оставалась тонкая полоска. 100% высоты + фиксированный запас с лихвой
-     перекрывают нижний отступ при любой высоте кнопки. */
   transform: translateY(calc(100% + var(--space-4) + 40px));
   visibility: hidden;
   transition: transform 0.3s var(--ease-out), visibility 0s linear 0.3s;
@@ -1197,8 +1134,8 @@ body:has(.mobile-menu.is-open) .brand {
 
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  transform: translateY(20px);
+  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
 }
 
 .reveal.is-visible {
@@ -1210,15 +1147,14 @@ body:has(.mobile-menu.is-open) .brand {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
 
-/* ---------- 16. Фото и запасной градиент ---------- */
+/* ---------- 16. Фото ---------- */
 
 .photo {
   position: relative;
-  border-radius: var(--radius-l);
   overflow: hidden;
-  background: linear-gradient(155deg, #E7CE9C, #C79E6C 45%, #7C6B4F 100%);
+  border: 1px solid var(--color-line-strong);
+  background: linear-gradient(155deg, #2A3B26, #17281D 60%, #0E1913 100%);
   aspect-ratio: 4 / 5;
-  box-shadow: var(--shadow-card);
 }
 
 .photo img {
@@ -1237,8 +1173,8 @@ body:has(.mobile-menu.is-open) .brand {
   padding: var(--space-5);
   text-align: center;
   font-size: 0.8rem;
-  color: rgba(255, 252, 245, 0.85);
-  background: rgba(59, 48, 36, 0.12);
+  color: var(--color-ink-soft);
+  background: rgba(0, 0, 0, 0.25);
 }
 
 /* ---------- 17а. Фотогалерея ---------- */
@@ -1255,7 +1191,6 @@ body:has(.mobile-menu.is-open) .brand {
 
 .gallery-grid .photo {
   aspect-ratio: 4 / 5;
-  border-radius: var(--radius-m);
 }
 
 @media (min-width: 700px) {
