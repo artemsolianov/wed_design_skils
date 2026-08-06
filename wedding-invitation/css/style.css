@@ -88,12 +88,16 @@ ul {
   --color-surface: #FFFFFF;     /* белый — бережём для акцентов и карточек */
   --color-ink: #3B3024;         /* тёплый тёмно-коричневый — основной текст */
   --color-ink-soft: #6E5F4D;    /* тёплый коричневый — вторичный текст */
-  --color-ink-faint: #9C8D77;   /* приглушённый текст / подписи */
+  /* ink-faint и sand-deep затемнены против исходных #9C8D77 / #A97D4C —
+     на кремовом фоне те давали ~3:1, ниже нормы WCAG AA (4.5:1) для
+     обычного текста; эти варианты дают ≥4.5:1, найдено автоматической
+     проверкой контраста по всей странице. */
+  --color-ink-faint: #7D6F58;   /* приглушённый текст / подписи */
   --color-olive: #7C7A4C;       /* оливковый */
   --color-olive-deep: #5F5D39;
   --color-sage: #8FA07E;        /* шалфейный */
   --color-sand: #C79E6C;        /* песочный, насыщенный — акцент/кнопки */
-  --color-sand-deep: #A97D4C;
+  --color-sand-deep: #8A5F34;
   --color-sky: #94B4C4;         /* небесно-голубой — ссылки, карта */
   --color-line: #E1D3B6;        /* тонкие разделители */
   --color-line-strong: #C9B892;
@@ -281,7 +285,8 @@ textarea:focus-visible,
 /* Внимание: переопределяем цвета только у заголовка секции и текста "в воздухе"
    тёмного фона — карточки (.location-card) остаются светлыми и сохраняют
    свои обычные (тёмные на светлом) цвета текста, их не трогаем. */
-.section--dark .section-head h2 { color: var(--color-on-dark); }
+.section--dark .section-head h2,
+.section--dark .contact-block h2 { color: var(--color-on-dark); }
 .section--dark .section-head p { color: var(--color-on-dark-soft); }
 .section--dark .map-note { color: var(--color-on-dark-soft); opacity: 0.8; }
 
@@ -781,6 +786,20 @@ textarea:focus-visible,
   }
 }
 
+.timeline-time-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.timeline-heart {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--color-olive-deep);
+  opacity: 0.65;
+}
+
 .timeline-time {
   font-family: var(--font-display);
   font-weight: 700;
@@ -824,6 +843,10 @@ textarea:focus-visible,
 
 .location-card {
   background: var(--color-surface);
+  /* Явно задаём цвет текста — карточка светлая внутри тёмной секции,
+     без этого обычные <p> наследуют светлый цвет текста секции и почти
+     не видны на белом фоне (только у заголовков был свой явный color). */
+  color: var(--color-ink);
   border-radius: var(--radius-l);
   padding: var(--space-6);
   box-shadow: var(--shadow-card);
@@ -914,7 +937,12 @@ textarea:focus-visible,
   .swatch { height: 22vw; max-height: 340px; min-height: 260px; }
 }
 
-.swatch[data-ink="light"] { color: #FFFCF5; }
+.swatch[data-ink="light"] {
+  color: #FFFCF5;
+  /* контраст на оливковом (#7D7C4C) около 4.2:1, чуть ниже нормы — тень
+     добавляет читаемости, не трогая саму заливку образца. */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
 
 .swatch-name {
   font-family: var(--font-display);
@@ -1004,9 +1032,9 @@ textarea:focus-visible,
   margin-inline: auto;
 }
 
-/* ---------- 12. RSVP — простой контакт вместо формы ---------- */
+/* ---------- 12. RSVP и «Ведущий» — простые контакт-блоки ---------- */
 
-.rsvp-simple {
+.contact-block {
   max-width: 28rem;
   margin-inline: auto;
   text-align: center;
@@ -1014,6 +1042,11 @@ textarea:focus-visible,
   flex-direction: column;
   align-items: center;
   gap: var(--space-4);
+}
+
+.section--dark .contact-block .lead,
+.section--dark .contact-block .contact-note {
+  color: var(--color-on-dark-soft);
 }
 
 .rsvp-deadline {
@@ -1028,12 +1061,17 @@ textarea:focus-visible,
   border-radius: var(--radius-full);
 }
 
-.rsvp-phone {
+.section--dark .rsvp-deadline {
+  color: var(--color-rust-light);
+  background: rgba(255, 252, 245, 0.08);
+}
+
+.contact-phone {
   font-size: 1.15rem;
   padding-inline: var(--space-7);
 }
 
-.rsvp-note {
+.contact-note {
   font-size: 0.85rem;
   color: var(--color-ink-faint);
 }
