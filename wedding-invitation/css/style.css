@@ -751,71 +751,43 @@ textarea:focus-visible,
   .scroll-cue svg { animation: none; }
 }
 
-/* ---------- 8. Программа дня (таймлайн) ---------- */
+/* ---------- 8. Программа дня — крупное время вместо иконок-в-кружках ---------- */
 
 .timeline {
-  position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-7);
-}
-
-.timeline::before {
-  content: "";
-  position: absolute;
-  left: 27px;
-  top: 8px;
-  bottom: 8px;
-  width: 2px;
-  background: var(--color-line-strong);
-}
-
-@media (min-width: 700px) {
-  .timeline::before { left: 35px; }
 }
 
 .timeline-item {
-  position: relative;
-  padding-left: var(--space-9);
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
+  padding-block: var(--space-7);
+  border-top: 1px solid var(--color-line);
 }
 
-.timeline-marker {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 56px;
-  height: 56px;
-  border-radius: var(--radius-full);
-  background: var(--color-surface);
-  border: 2px solid var(--color-line-strong);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-olive-deep);
-  box-shadow: var(--shadow-card);
-}
+.timeline-item:last-child { padding-bottom: 0; }
 
 @media (min-width: 700px) {
-  .timeline-marker { width: 72px; height: 72px; }
+  .timeline-item {
+    grid-template-columns: minmax(auto, 220px) 1fr;
+    align-items: baseline;
+    gap: var(--space-7);
+  }
 }
-
-.timeline-marker svg { width: 26px; height: 26px; }
 
 .timeline-time {
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 2vw + 1.2rem, 2.5rem);
   font-weight: 700;
+  font-size: clamp(3rem, 5vw + 1rem, 4.5rem);
+  line-height: 0.95;
   color: var(--color-rust);
-  line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
-.timeline-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-l);
-  padding: var(--space-6);
-  box-shadow: var(--shadow-card);
+.timeline-time span {
+  font-size: 0.5em;
+  font-weight: 500;
+  color: var(--color-ink-faint);
 }
 
 .timeline-tag {
@@ -888,85 +860,108 @@ textarea:focus-visible,
   color: var(--color-ink-faint);
 }
 
-/* ---------- 10. Дресс-код ---------- */
+/* ---------- 10. Дресс-код — полоса фактурных образцов во всю ширину ---------- */
 
-.palette-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4);
+.dresscode-section { padding-bottom: var(--space-8); }
+
+/* Вырывается из .container на всю ширину окна — приём, который стоит
+   поберечь для одного места на странице, чтобы он не обесценился. */
+.palette-strip {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-top: var(--space-7);
+  margin-bottom: var(--space-7);
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
-@media (min-width: 600px) {
-  .palette-grid { grid-template-columns: repeat(3, 1fr); }
+.palette-strip::-webkit-scrollbar { display: none; }
+
+.swatch {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  flex: 0 0 42vw;
+  min-width: 0; /* иначе flex-shrink игнорируется из-за min-width:auto на длинных названиях */
+  scroll-snap-align: start;
+  height: 62vw;
+  max-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-4);
+  color: var(--color-ink);
+  -webkit-tap-highlight-color: transparent;
+  transition: flex-basis 0.3s var(--ease-out);
+}
+
+@media (min-width: 560px) {
+  .swatch { flex: 0 0 24vw; height: 40vw; max-height: 360px; }
 }
 
 @media (min-width: 900px) {
-  .palette-grid { grid-template-columns: repeat(4, 1fr); }
+  .palette-strip { scroll-snap-type: none; overflow: visible; }
+  .swatch { flex: 1 1 0; height: 22vw; max-height: 340px; min-height: 260px; }
 }
 
-.swatch {
-  background: var(--color-surface);
-  border-radius: var(--radius-m);
-  padding: var(--space-4);
-  box-shadow: var(--shadow-card);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.swatch-color {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: var(--radius-s);
-  border: 1px solid rgba(59, 48, 36, 0.08);
-}
+.swatch[data-ink="light"] { color: #FFFCF5; }
 
 .swatch-name {
+  font-family: var(--font-display);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: clamp(1.1rem, 1vw + 0.9rem, 1.4rem);
+  line-height: 1.1;
+  overflow-wrap: break-word; /* длинные названия переносятся, а не обрезаются */
+  hyphens: auto; /* по возможности — с переносом по слогам, а не как попало */
+  transition: opacity 0.2s var(--ease-out);
 }
 
-.swatch--callout {
-  border: 1.5px dashed var(--color-line-strong);
+.swatch-hex {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  opacity: 0.7;
+  transition: opacity 0.2s var(--ease-out);
 }
 
-.swatch-badge {
-  align-self: flex-start;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--color-sand-deep);
-  background: var(--color-bg-alt);
-  padding: 0.2em 0.6em;
-  border-radius: var(--radius-full);
-}
-
-.dresscode-notes {
-  margin-top: var(--space-6);
-  display: grid;
-  gap: var(--space-4);
-}
-
-@media (min-width: 700px) {
-  .dresscode-notes { grid-template-columns: repeat(2, 1fr); }
-}
-
-.note-card {
-  background: var(--color-bg-alt);
-  border-radius: var(--radius-m);
-  padding: var(--space-5);
+.swatch-copied {
+  position: absolute;
+  inset: 0;
   display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-2);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transition: opacity 0.2s var(--ease-out);
+  pointer-events: none;
 }
 
-.note-card svg {
-  flex-shrink: 0;
-  width: 22px;
-  height: 22px;
-  color: var(--color-olive-deep);
-  margin-top: 0.2em;
+.swatch.is-copied .swatch-name,
+.swatch.is-copied .swatch-hex { opacity: 0; }
+.swatch.is-copied .swatch-copied { opacity: 1; }
+
+.swatch:focus-visible {
+  outline: 3px solid var(--color-ink);
+  outline-offset: -3px;
+}
+
+.dresscode-legend {
+  max-width: 40rem;
+  color: var(--color-ink-soft);
+  font-size: 0.95rem;
 }
 
 /* ---------- 11. Подарки — крупная редакторская цитата, без рамок ---------- */
@@ -1006,46 +1001,16 @@ textarea:focus-visible,
   margin-inline: auto;
 }
 
-/* ---------- 12. RSVP ---------- */
+/* ---------- 12. RSVP — простой контакт вместо формы ---------- */
 
-.rsvp-layout {
-  display: grid;
-  gap: var(--space-8);
-}
-
-@media (min-width: 900px) {
-  .rsvp-layout {
-    grid-template-columns: 0.85fr 1fr;
-    align-items: center;
-    gap: var(--space-9);
-  }
-}
-
-.rsvp-intro { max-width: 30rem; }
-.rsvp-intro .lead { margin-top: var(--space-4); }
-
-.rsvp-intro-signature {
-  display: inline-block;
-  margin-top: var(--space-6);
-  font-size: var(--text-h3);
-}
-
-.rsvp-wrap {
-  max-width: 38rem;
-  width: 100%;
+.rsvp-simple {
+  max-width: 28rem;
   margin-inline: auto;
-  background: var(--color-surface);
-  border-radius: var(--radius-l);
-  padding: var(--space-7) var(--space-6);
-  box-shadow: var(--shadow-soft);
-}
-
-@media (min-width: 900px) {
-  .rsvp-wrap { margin-inline: 0; }
-}
-
-@media (min-width: 640px) {
-  .rsvp-wrap { padding: var(--space-8); }
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
 }
 
 .rsvp-deadline {
@@ -1058,188 +1023,16 @@ textarea:focus-visible,
   background: var(--color-bg-alt);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-full);
-  margin-bottom: var(--space-5);
 }
 
-.field {
-  margin-bottom: var(--space-5);
+.rsvp-phone {
+  font-size: 1.15rem;
+  padding-inline: var(--space-7);
 }
 
-.field label {
-  display: block;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: var(--space-2);
-}
-
-.field-hint {
-  font-size: 0.8rem;
+.rsvp-note {
+  font-size: 0.85rem;
   color: var(--color-ink-faint);
-  margin-top: var(--space-1);
-}
-
-.field input[type="text"],
-.field input[type="tel"],
-.field input[type="number"],
-.field textarea {
-  width: 100%;
-  font: inherit;
-  font-size: 1rem; /* не меньше 16px — иначе iOS Safari скейлит вью при фокусе */
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-s);
-  border: 1.5px solid var(--color-line-strong);
-  background: var(--color-bg);
-  color: var(--color-ink);
-  min-height: 48px;
-  transition: border-color 0.2s var(--ease-out);
-}
-
-.field textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-.field input:focus,
-.field textarea:focus {
-  border-color: var(--color-focus);
-  outline: none;
-}
-
-.field.has-error input,
-.field.has-error textarea {
-  border-color: #A3432E;
-}
-
-.error-text {
-  display: none;
-  color: #A3432E;
-  font-size: 0.8rem;
-  margin-top: var(--space-1);
-}
-
-.field.has-error .error-text { display: block; }
-
-.radio-group {
-  display: grid;
-  gap: var(--space-3);
-}
-
-@media (min-width: 480px) {
-  .radio-group { grid-template-columns: 1fr 1fr; }
-}
-
-.radio-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  border: 1.5px solid var(--color-line-strong);
-  border-radius: var(--radius-m);
-  padding: var(--space-4);
-  cursor: pointer;
-  min-height: 48px;
-  transition: border-color 0.2s var(--ease-out), background-color 0.2s var(--ease-out);
-}
-
-.radio-card input {
-  position: absolute;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  inset: 0;
-  margin: 0;
-  cursor: pointer;
-}
-
-.radio-card .radio-dot {
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-full);
-  border: 1.5px solid var(--color-line-strong);
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.radio-card .radio-dot::after {
-  content: "";
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-full);
-  background: var(--color-olive-deep);
-  transform: scale(0);
-  transition: transform 0.15s var(--ease-out);
-}
-
-.radio-card input:checked ~ .radio-dot::after { transform: scale(1); }
-
-.radio-card:has(input:checked) {
-  border-color: var(--color-olive-deep);
-  background: var(--color-bg-alt);
-}
-
-.radio-card:has(input:focus-visible) {
-  outline: 3px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-#guests-field {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: max-height 0.3s var(--ease-out), opacity 0.3s var(--ease-out), margin 0.3s var(--ease-out);
-  margin-bottom: 0;
-}
-
-#guests-field.is-visible {
-  max-height: 200px;
-  opacity: 1;
-  margin-bottom: var(--space-5);
-}
-
-.rsvp-status {
-  margin-top: var(--space-4);
-  font-size: 0.9rem;
-  min-height: 1.4em;
-}
-
-.rsvp-status[data-state="error"] { color: #A3432E; }
-.rsvp-status[data-state="sending"] { color: var(--color-ink-faint); }
-
-.rsvp-success {
-  display: none;
-  text-align: center;
-  gap: var(--space-4);
-  flex-direction: column;
-  align-items: center;
-  padding: var(--space-6) 0;
-}
-
-.rsvp-success.is-visible { display: flex; }
-.rsvp-form.is-hidden { display: none; }
-
-.rsvp-success svg {
-  width: 52px;
-  height: 52px;
-  color: var(--color-sage);
-}
-
-.btn-spinner {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid rgba(251, 246, 236, 0.35);
-  border-top-color: var(--color-bg);
-  display: none;
-  animation: spin 0.7s linear infinite;
-}
-
-.is-loading .btn-spinner { display: inline-block; }
-.is-loading .btn-label { opacity: 0.85; }
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 /* ---------- 13. Подвал ---------- */

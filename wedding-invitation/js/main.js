@@ -203,184 +203,22 @@
     );
   });
 
-  /* ---------- Дресс-код: копирование HEX по клику на образец ---------- */
+  /* ---------- Дресс-код: копирование HEX по клику на образец ----------
+     Образцы — настоящие <button>, так что фокус/Enter/Space уже работают
+     из коробки, добавлять их вручную не нужно. */
   document.querySelectorAll(".swatch[data-hex]").forEach((swatch) => {
-    swatch.style.cursor = "pointer";
-    swatch.setAttribute("tabindex", "0");
-    swatch.setAttribute("role", "button");
     const hex = swatch.dataset.hex;
-    swatch.setAttribute("aria-label", `Скопировать код цвета ${hex}`);
+    swatch.setAttribute("aria-label", `${swatch.querySelector(".swatch-name")?.textContent ?? ""}: скопировать код цвета ${hex}`);
 
-    const copy = async () => {
+    swatch.addEventListener("click", async () => {
       try {
         await navigator.clipboard.writeText(hex);
-        const name = swatch.querySelector(".swatch-name");
-        if (!name) return;
-        const original = name.textContent;
-        name.textContent = "Скопировано: " + hex;
-        setTimeout(() => {
-          name.textContent = original;
-        }, 1400);
+        swatch.classList.add("is-copied");
+        setTimeout(() => swatch.classList.remove("is-copied"), 1400);
       } catch (_) {
         /* буфер обмена недоступен — молча игнорируем, это необязательная приятность */
-      }
-    };
-
-    swatch.addEventListener("click", copy);
-    swatch.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        copy();
       }
     });
   });
 
-  /* ---------- RSVP форма ----------
-     ВАЖНО ДЛЯ ЗАПУСКА: пропишите свой адрес приёма заявок в ENDPOINT.
-     Подходит форма Formspree/Getform/Google-форма-скрипт — подробности в README.
-     Если ENDPOINT не задан или запрос не удался, форма аккуратно
-     откатывается на отправку письма (mailto) с той же информацией,
-     и в любом случае сохраняет ответ локально (localStorage) как копию. */
-  const ENDPOINT = ""; // например: "https://formspree.io/f/xxxxxxx"
-  const COUPLE_EMAIL = "your-email@example.com"; // замените на свою почту
-
-  const form = document.querySelector(".rsvp-form");
-  if (form) {
-    const attendingRadios = form.querySelectorAll('input[name="attending"]');
-    const guestsField = document.getElementById("guests-field");
-    const statusEl = form.querySelector(".rsvp-status");
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const successEl = document.querySelector(".rsvp-success");
-
-    const syncGuestsField = () => {
-      const checked = form.querySelector('input[name="attending"]:checked');
-      const attending = checked && checked.value === "yes";
-      guestsField?.classList.toggle("is-visible", Boolean(attending));
-      const guestsInput = document.getElementById("guests");
-      if (guestsInput) guestsInput.required = Boolean(attending);
-    };
-
-    attendingRadios.forEach((r) => r.addEventListener("change", syncGuestsField));
-    syncGuestsField();
-
-    const setError = (field, message) => {
-      const wrap = field.closest(".field");
-      if (!wrap) return;
-      wrap.classList.add("has-error");
-      const errorEl = wrap.querySelector(".error-text");
-      if (errorEl) errorEl.textContent = message;
-    };
-
-    const clearErrors = () => {
-      form.querySelectorAll(".field.has-error").forEach((f) => {
-        f.classList.remove("has-error");
-      });
-    };
-
-    const validate = (data) => {
-      let valid = true;
-      const nameInput = form.querySelector("#name");
-      if (!data.name || data.name.trim().length < 2) {
-        setError(nameInput, "Пожалуйста, укажите имя и фамилию");
-        valid = false;
-      }
-      if (!data.attending) {
-        if (statusEl) {
-          statusEl.dataset.state = "error";
-          statusEl.textContent = "Пожалуйста, отметьте, сможете ли вы приехать";
-        }
-        valid = false;
-      }
-      return valid;
-    };
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      clearErrors();
-      if (statusEl) {
-        statusEl.dataset.state = "";
-        statusEl.textContent = "";
-      }
-
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-
-      if (!validate(data)) return;
-
-      submitBtn?.classList.add("is-loading");
-      submitBtn?.setAttribute("disabled", "true");
-      if (statusEl) {
-        statusEl.dataset.state = "sending";
-        statusEl.textContent = "Отправляем ваш ответ…";
-      }
-
-      let delivered = false;
-
-      if (ENDPOINT) {
-        try {
-          const res = await fetch(ENDPOINT, {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            body: formData,
-          });
-          delivered = res.ok;
-        } catch (_) {
-          delivered = false;
-        }
-      }
-
-      try {
-        const stored = JSON.parse(localStorage.getItem("rsvp_responses") || "[]");
-        stored.push({ ...data, submittedAt: new Date().toISOString() });
-        localStorage.setItem("rsvp_responses", JSON.stringify(stored));
-      } catch (_) {
-        /* localStorage может быть недоступен (приватный режим) — не критично */
-      }
-
-      submitBtn?.classList.remove("is-loading");
-      submitBtn?.removeAttribute("disabled");
-
-      if (delivered) {
-        showSuccess();
-        return;
-      }
-
-      if (!ENDPOINT) {
-        // Резервный сценарий: открыть письмо с уже готовым текстом.
-        const subject = encodeURIComponent(
-          `RSVP: ${data.name || "Гость"} — свадьба Артёма и Юлии`
-        );
-        const bodyLines = [
-          `Имя: ${data.name || ""}`,
-          `Придёт: ${data.attending === "yes" ? "Да" : "Не сможет приехать"}`,
-          data.attending === "yes" ? `Гостей: ${data.guests || 1}` : "",
-          `Комментарий: ${data.message || "—"}`,
-        ].filter(Boolean);
-        const mailto = `mailto:${COUPLE_EMAIL}?subject=${subject}&body=${encodeURIComponent(
-          bodyLines.join("\n")
-        )}`;
-        window.location.href = mailto;
-        if (statusEl) {
-          statusEl.dataset.state = "";
-          statusEl.textContent =
-            "Открываем почтовый клиент с готовым письмом — просто нажмите «Отправить».";
-        }
-        showSuccess();
-        return;
-      }
-
-      if (statusEl) {
-        statusEl.dataset.state = "error";
-        statusEl.textContent =
-          "Не получилось отправить ответ автоматически. Пожалуйста, напишите нам напрямую.";
-      }
-    });
-
-    function showSuccess() {
-      form.classList.add("is-hidden");
-      successEl?.classList.add("is-visible");
-      successEl?.setAttribute("tabindex", "-1");
-      successEl?.focus();
-    }
-  }
 })();
