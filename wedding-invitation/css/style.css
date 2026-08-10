@@ -91,6 +91,28 @@ ul {
   list-style: none;
 }
 
+/* Snell Roundhand — рукописная гравировка для заголовков и имён пары
+   (самостоятельно предоставлена: не из Google Fonts, поэтому self-host,
+   а не <link>). В зип-архиве только Bold и Black — этого достаточно:
+   Bold ложится на обычный вес заголовков, Black — на h1 и декоративный
+   амперсанд, где раньше стоял font-weight:900. Кириллица в файле есть
+   (проверено по cmap), латиница и "&" — тоже. */
+@font-face {
+  font-family: 'Snell Roundhand';
+  src: url('../assets/fonts/snellroundhand-bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Snell Roundhand';
+  src: url('../assets/fonts/snellroundhand-black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* ---------- 2. Дизайн-токены ---------- */
 
 :root {
@@ -144,6 +166,11 @@ ul {
   --font-display: 'Alegreya', 'Georgia', serif;
   --font-label: 'Alegreya SC', 'Alegreya', serif;
   --font-body: 'PT Sans', 'Segoe UI', sans-serif;
+  /* Рукописная гравировка — только заголовки и имена пары, не текст
+     программы: связная скоропись читается короткими фразами, а не
+     абзацами. Если шрифт не загрузился (нет файла), падаем в Alegreya,
+     а не в системный serif — гарнитура остаётся частью того же мира. */
+  --font-script: 'Snell Roundhand', var(--font-display);
 
   /* Модульная сетка отступов (кратна 4px) */
   --space-1: 0.25rem;
@@ -185,9 +212,12 @@ ul {
 /* ---------- 3. Типографика ---------- */
 
 h1, h2, h3, h4 {
-  font-family: var(--font-display);
+  font-family: var(--font-script);
   font-weight: 700;
-  line-height: 1.1;
+  /* Выше, чем 1.1 у прежней Alegreya: связная скоропись даёт росчерки
+     выше и ниже строки (заглавные, "р", "д"), при 1.1 они подрезались
+     соседними строками в многострочных заголовках. */
+  line-height: 1.3;
   margin: 0;
   color: var(--color-ink);
 }
@@ -218,12 +248,13 @@ p:last-child { margin-bottom: 0; }
   display: none;
 }
 
-/* Курсивная Alegreya вместо ещё одного Playfair-италика — тёплый акцент
-   держится на золоте, а не на очередном курсивном подчерке. */
+/* Подпись парой — рукописная гравировка, не курсив обычной гарнитуры:
+   font-style:italic убран, у Snell Roundhand наклон уже часть рисунка
+   буквы, синтетический курсив поверх нужен не был бы даже как fallback
+   (Alegreya italic и так есть в её собственном начертании). */
 .script-accent {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 600;
+  font-family: var(--font-script);
+  font-weight: 700;
   color: var(--color-gold);
 }
 
@@ -353,11 +384,14 @@ textarea:focus-visible,
   padding-block: var(--space-3);
 }
 
+/* Имена в шапке — тоже рукописная гравировка, не капитель: letter-spacing
+   у капители был нужен, чтобы разредить прописные буквы, у связной
+   скорописи он, наоборот, рвёт соединения между буквами. */
 .brand {
-  font-family: var(--font-label);
-  font-weight: 600;
-  font-size: 1.1rem;
-  letter-spacing: 0.04em;
+  font-family: var(--font-script);
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: 0;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -1130,9 +1164,8 @@ textarea:focus-visible,
   top: 50%;
   left: 50%;
   transform: translate(-50%, -55%);
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 700;
+  font-family: var(--font-script);
+  font-weight: 900;
   font-size: clamp(14rem, 44vw, 32rem);
   line-height: 1;
   color: var(--color-gold);
