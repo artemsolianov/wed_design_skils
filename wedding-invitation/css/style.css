@@ -1,24 +1,27 @@
 /* ==========================================================================
    Артём & Юлия — сайт-приглашение на свадьбу
 
-   НАПРАВЛЕНИЕ: винодельческая этикетка Кубани, на белой бумаге.
+   НАПРАВЛЕНИЕ: палитра дресс-кода — материал сайта тот же, что и
+   материал зала.
 
-   Третий заход на цвет поля: сначала было бутылочно-зелёное полотно на
-   всю страницу — читалось слишком тяжело. Сделали белым, но оставили
-   зелёным две смысловые секции (место проведения, ведущий) — с реальным
-   фото и текстом эти секции всё равно читались закрашенными тёмными
-   прямоугольниками, тем же самым, от чего уходили. Зелёный остался
-   только там, где он не сплошная заливка большого блока: герой (фото),
-   шапка/мобильное меню (тонкая полоса и оверлей, не секция контента),
-   и точечно — текст, рамки, винная плашка дедлайна. Фольга старого
-   золота, пергаментная этикетка для карточек и гравированная
-   Alegreya/Marck Script остаются тем же материальным миром.
+   Четвёртый заход на цвет: было бутылочно-зелёное полотно (тяжело),
+   стало белое поле с зелёными островами-секциями (эти секции читались
+   закрашенными тёмными блоками), потом — золото как акцентный цвет
+   (читалось жёлтым, тоже не тем). Прежний источник цвета был
+   "винодельческая этикетка" — сочинённая метафора. Новый источник —
+   буквальный: восемь круглых образцов ткани в разделе «Дресс-код»,
+   в них гости и будут одеты, и весь цвет сайта выведен из них же —
+   тёмный кофейно-коричневый ink (из «Коричневого»), тёплая терракотовая
+   глина-акцент (углублённый «Песочный»/«Бежевый»), тёмный шалфей-акцент
+   (углублённый «Оливковый»/«Шалфейный»). Пергаментная этикетка для
+   карточек и гравированная PT Serif/Marck Script остаются тем же
+   материальным миром — тёплым, бумажным, рукописным.
 
    Отсюда — два параллельных набора цвета текста: --color-ink(-soft/
    -faint) для белого поля (тёмный на светлом, используется почти
    везде) и --color-on-dark(-soft/-faint) только для героя, шапки и
-   мобильного меню — там же фольга остаётся яркой (--color-gold), а не
-   приглушённой (--color-gold-deep), которая читаема только на светлом.
+   мобильного меню — там же акцент остаётся ярким (--color-clay), а не
+   приглушённым (--color-clay-deep), который читаем только на светлом.
 
    Формальная дисциплина от предыдущего захода сохранена: прямые углы без
    исключений, кнопки — плотная заливка с кантом, а не мягкая тень. Но
@@ -100,81 +103,87 @@ ul {
 /* ---------- 2. Дизайн-токены ---------- */
 
 :root {
-  /* Белая бумага — основное поле страницы. Не тёплый крем (это ровно
-     тот ИИ-дефолт, от которого мы уходили с самого начала) — чистый,
-     чуть прохладный белый, как реальный лист хорошей бумаги. bg-alt —
-     едва уловимый оттенок с зелёным подтоном (не бежевый!), для ритма
-     между соседними светлыми секциями. */
+  /* Четвёртый заход на палитру: убраны и бутылочная зелень, и золото —
+     обе читались как отдельный "бренд поверх свадьбы", а не выведены
+     из чего-то настоящего. Новый источник цвета — сама палитра дресс-
+     кода (8 круглых образцов ниже), гости в это одеты, поэтому цвет
+     сайта и цвет зала совпадают буквально, а не по мотивам. Белая
+     бумага — то же основное поле, bg-alt — тёплый песочный оттенок
+     (не зелёный), из семьи «Бежевый»/«Молочный». */
   --color-bg: #FFFFFF;
-  --color-bg-alt: #F1F4EC;
-  --color-ink: #1C2B20;         /* почти чёрный, но с зелёным отливом — "чернила из виноградной кожицы" */
-  --color-ink-soft: #44534A;    /* 8.1:1 на белом */
-  --color-ink-faint: #5E6E60;   /* 5.4:1 на белом — приглушённые подписи */
-  --color-line: rgba(28, 43, 32, 0.14);
-  --color-line-strong: rgba(28, 43, 32, 0.28);
+  --color-bg-alt: #F6F0E4;
+  --color-ink: #33241A;         /* тёмный кофейно-коричневый — из семьи «Коричневый» дресс-кода, углублён до контраста текста */
+  --color-ink-soft: #5C4A3B;    /* 8.4:1 на белом */
+  /* Чуть темнее, чем даёт формула "5:1 на белом" — на белом 6.0:1, но
+     .map-note лежит на --color-bg-alt (не на чистом белом), и там запас
+     тоньше (5.3:1). Первая версия (#7D6B59) была 5.1:1 на белом и давала
+     4.49:1 на bg-alt — на сотую ниже порога 4.5:1, поймал axe. */
+  --color-ink-faint: #71604F;
+  --color-line: rgba(51, 36, 26, 0.14);
+  --color-line-strong: rgba(51, 36, 26, 0.28);
   /* Тот же приём линии, но для использования НА тёмных островах ниже
-     (герой, --color-dark секции) — там тёмная линия потерялась бы. */
-  --color-line-on-dark: rgba(243, 234, 214, 0.16);
-  --color-line-on-dark-strong: rgba(243, 234, 214, 0.32);
-  /* Фокус по умолчанию — приглушённое золото: на белом поле яркое
-     --color-gold даёт 2.4:1 (нужно 3:1 для контура непечатного
-     элемента), а приглушённое — 6.9:1. Ниже отдельно возвращаем яркое
-     золото для колец фокуса внутри тёмных островов, где приглушённое,
+     (герой, --color-dark) — там тёмная линия потерялась бы. */
+  --color-line-on-dark: rgba(242, 230, 211, 0.16);
+  --color-line-on-dark-strong: rgba(242, 230, 211, 0.32);
+  /* Фокус по умолчанию — приглушённая глина: на белом поле яркая
+     --color-clay даёт 2.1:1 (нужно 3:1 для контура непечатного
+     элемента), а приглушённая — 5.9:1. Ниже отдельно возвращаем яркую
+     версию для колец фокуса внутри тёмных островов, где приглушённая,
      наоборот, проваливается в фон. */
-  --color-focus: var(--color-gold-deep);
+  --color-focus: var(--color-clay-deep);
 
   /* Пергамент — бумага самой этикетки: используется точечно, для карточек
      и полей ввода информации (RSVP, локации) — отдельным слоем поверх
-     белого или зелёного поля, как наклеенная этикетка. */
+     белого или тёмного поля, как наклеенная этикетка. Уже был тёплым
+     нейтральным тоном, из той же в семьи, что и новая палитра —
+     менять не пришлось. */
   --color-parchment: #F3EAD6;
   --color-parchment-alt: #EAE0C7;
   --color-parchment-ink: #241C12;
   --color-parchment-ink-soft: #4A3B26;
 
-  /* Фольга — единственный яркий акцент, тёплое старое золото, а не
-     терракота и не неон. Яркая версия — только на тёмных островах
-     (герой, шапка, --color-dark секции); на белом поле весь текст и
-     декор идёт приглушённой --color-gold-deep, иначе 2.4:1 вместо 4.5+. */
-  --color-gold: #C9A24B;
-  --color-gold-deep: #765420;   /* читаемый текстом и на белом (6.9:1), и на пергаменте (5.7:1) */
+  /* Глина — тёплый терракотовый акцент, углублённая версия «Песочного»/
+     «Бежевого» из дресс-кода, а не отдельный "золотой" бренд-цвет.
+     Яркая версия — только на тёмных островах (герой, шапка); на белом
+     поле весь текст и декор идёт приглушённой --color-clay-deep,
+     иначе 2.1:1 вместо 4.5+. */
+  --color-clay: #D9A968;
+  --color-clay-deep: #8A5A34;   /* читаемая текстом и на белом (5.9:1), и на пергаменте (5.1:1) */
 
-  /* Второй, более редкий акцент — сургучная печать / красное вино;
-     используется единично (дедлайн RSVP, одна из двух временных меток
-     программы), не наравне с золотом. Вино темнее золота, поэтому
-     годится текстом прямо на белом (10.7:1) — раньше на зелёном поле
-     для этого нужен был отдельный светлый оттенок, теперь не нужен. */
-  --color-wine: #6E2438;
+  /* Второй, более редкий акцент — тёмный шалфей/олива, из той же
+     дресс-код-палитры («Оливковый»/«Шалфейный»), а не отдельный
+     бордовый бренд-цвет. Используется единично (дедлайн RSVP, одна из
+     двух временных меток программы), не наравне с глиной. Достаточно
+     тёмный, чтобы годиться текстом прямо на белом (7.4:1). */
+  --color-olive: #4B5A3A;
 
-  /* Зелёные острова — то, чем раньше было ВСЁ поле страницы. Теперь
-     только герой (фото) и шапка/мобильное меню (полоса и оверлей
-     поверх фото или своей тёмной подложки, не секция контента) —
-     .section--dark когда-то давал зелёный фон целым секциям («Место
-     проведения», «Ведущий»), но это снова читалось закрашенными
-     тёмными блоками, поэтому убрано; класс остался в разметке, просто
-     без тёмной заливки. */
-  --color-dark: #0E1913;
-  --color-on-dark: #F3EAD6;
-  --color-on-dark-soft: #C9C0AC;
-  --color-on-dark-faint: #9C927B;
+  /* Тёмные острова — то, чем раньше было ВСЁ поле страницы (зелёным).
+     Теперь тёплый кофейно-чёрный (из той же коричневой семьи, что и
+     --color-ink, просто темнее и без подмеса) — только герой (фото) и
+     шапка/мобильное меню (полоса и оверлей поверх фото или своей
+     тёмной подложки, не секция контента). */
+  --color-dark: #211510;
+  --color-on-dark: #F2E6D3;
+  --color-on-dark-soft: #CBB69B;
+  --color-on-dark-faint: #A98E72;
 
-  /* Гравированная Alegreya вместо Playfair/Cormorant/Fraunces — не
-     рефлекс из тренировочных данных, а выбор под конкретный материал:
-     контрастные засечки и плотный чёрный читаются как гравировка на
-     плашке, а не как курсивный подчерк. Alegreya SC — тот же рисунок
-     капителью, для мелких этикеточных надписей. */
-  --font-display: 'Alegreya', 'Georgia', serif;
-  --font-label: 'Alegreya SC', 'Alegreya', serif;
+  /* PT Serif — та же кириллица-ориентированная студия ParaType, что и
+     у PT Sans в теле текста: осознанная пара, не Playfair/Cormorant/
+     Fraunces "по умолчанию". Тёплая, спокойная антиква без резкой
+     гравировки — подходит новой нейтральной, не "винтажно-этикеточной"
+     палитре, и с самым надёжным качеством кириллицы среди serif на
+     Google Fonts. Малых капителей у PT Serif нет — --font-label поэтому
+     не отдельная гарнитура, а тот же --font-body: разметка "лейбла"
+     держится трекингом и регистром через CSS, не рисунком шрифта. */
+  --font-display: 'PT Serif', 'Georgia', serif;
+  --font-label: 'PT Sans', 'Segoe UI', sans-serif;
   --font-body: 'PT Sans', 'Segoe UI', sans-serif;
   /* Рукописная гравировка — только заголовки и имена пары, не текст
      программы: связная скоропись читается короткими фразами, а не
-     абзацами. Snell Roundhand (первый выбор) заменён на Marck Script —
-     тоже связная скоропись с полной кириллицей, но с более крупным
-     x-height и более простым рисунком букв, читается заметно легче на
-     заголовках-фразах, а не только на именах. Через Google Fonts, не
-     self-host — доступна там, self-host для двух начертаний Roundhand
-     больше не нужен, файлы шрифта из репозитория убраны. Если шрифт не
-     загрузился, падаем в Alegreya, а не в системный serif — гарнитура
-     остаётся частью того же мира. */
+     абзацами. Marck Script — с полной кириллицей и крупным x-height,
+     читается заметно легче большинства декоративных скорописей. Если
+     шрифт не загрузился, падаем в PT Serif, а не в системный serif —
+     гарнитура остаётся частью того же мира. */
   --font-script: 'Marck Script', var(--font-display);
 
   /* Модульная сетка отступов (кратна 4px) */
@@ -263,11 +272,11 @@ p:last-child { margin-bottom: 0; }
    буквы, синтетический курсив поверх не нужен. Приглушённый gold-deep —
    дефолт «на случай использования на светлом поле»; единственное текущее
    использование (.footer-hero) теперь фото с тёмным затемнением и
-   переопределяет это ниже на яркую --color-gold. */
+   переопределяет это ниже на яркую --color-clay. */
 .script-accent {
   font-family: var(--font-script);
   font-weight: 400;
-  color: var(--color-gold-deep);
+  color: var(--color-clay-deep);
 }
 
 .text-center { text-align: center; }
@@ -297,13 +306,13 @@ textarea:focus-visible,
 /* Кольцо фокуса рисуется со сдвигом (outline-offset), то есть ложится
    НЕ на заливку самого элемента, а на то, что вокруг него. Внутри
    тёмных островов (герой, шапка/мобильное меню) это тёмно-зелёный фон —
-   приглушённое --color-gold-deep там проваливается (2.6:1 вместо нужных
-   3:1), нужно яркое --color-gold. «Место проведения» и «Ведущий» сюда
+   приглушённое --color-clay-deep там проваливается (2.6:1 вместо нужных
+   3:1), нужно яркое --color-clay. «Место проведения» и «Ведущий» сюда
    больше не входят — обе секции теперь светлые, им подходит дефолт. */
 .hero :focus-visible,
 .site-header :focus-visible,
 .mobile-menu :focus-visible {
-  outline-color: var(--color-gold);
+  outline-color: var(--color-clay);
 }
 
 .skip-link {
@@ -380,12 +389,12 @@ textarea:focus-visible,
 
 /* Пшеничный росчерк остаётся (реальная деталь фотосессии — не декор
    "ниоткуда"), перекрашен в фольгу вместо песочного. Приглушённая
-   --color-gold-deep, не яркая: секция дресс-кода светлая, яркое золото
+   --color-clay-deep, не яркая: секция дресс-кода светлая, яркое золото
    там дало бы 2:1 вместо нужных для декора хотя бы 3:1. */
 .wheat-divider {
   display: flex;
   justify-content: center;
-  color: var(--color-gold-deep);
+  color: var(--color-clay-deep);
   opacity: 0.7;
   margin-block: var(--space-6);
 }
@@ -409,7 +418,7 @@ textarea:focus-visible,
 }
 
 .site-header.is-scrolled {
-  background: rgba(14, 25, 19, 0.92);
+  background: rgba(33, 21, 16, 0.92);
   backdrop-filter: saturate(140%) blur(10px);
   -webkit-backdrop-filter: saturate(140%) blur(10px);
   box-shadow: 0 1px 0 var(--color-line);
@@ -472,7 +481,7 @@ textarea:focus-visible,
   position: absolute;
   left: 0; right: 0; bottom: -2px;
   height: 2px;
-  background: var(--color-gold);
+  background: var(--color-clay);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s var(--ease-out);
@@ -520,7 +529,7 @@ textarea:focus-visible,
   justify-content: center;
   width: 44px;
   height: 44px;
-  border: 1.5px solid var(--color-gold-deep);
+  border: 1.5px solid var(--color-clay-deep);
   background: var(--color-bg-alt);
   color: var(--color-ink);
   cursor: pointer;
@@ -567,7 +576,7 @@ textarea:focus-visible,
 
 .mobile-menu a {
   font-family: var(--font-label);
-  font-weight: 600;
+  font-weight: 700;
   font-size: clamp(1.05rem, 4vw + 0.35rem, 1.4rem);
   text-align: center;
   max-width: 90vw;
@@ -593,7 +602,7 @@ textarea:focus-visible,
   min-height: 50px;
   padding: var(--space-3) var(--space-6);
   font-family: var(--font-label);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.95rem;
   letter-spacing: 0.03em;
   text-decoration: none;
@@ -612,7 +621,7 @@ textarea:focus-visible,
    яркий (2.4:1, там кнопка бы читалась почти без края). */
 .btn-primary {
   background: var(--color-bg);
-  border-color: var(--color-gold-deep);
+  border-color: var(--color-clay-deep);
   color: var(--color-ink);
 }
 
@@ -657,14 +666,14 @@ textarea:focus-visible,
   background: var(--color-dark);
 }
 
-/* Настоящее фото со съёмки в винограднике — тёплый цвет снимка не
-   приглушаем: он и так совпадает с золотом фольги. Затемнение снизу —
-   переход в тёмно-зелёный тон самого героя (--color-dark), нужный, чтобы
-   текст поверх фото оставался читаемым, а не абстрактная "дымка". */
+/* Настоящее фото со съёмки — тёплый цвет снимка не приглушаем: он и так
+   совпадает с терракотой глины. Затемнение снизу — переход в тёплый
+   кофейно-чёрный тон самого героя (--color-dark), нужный, чтобы текст
+   поверх фото оставался читаемым, а не абстрактная "дымка". */
 .hero {
   background-image:
     url('../assets/photos/hero.jpg'),
-    linear-gradient(180deg, #3B3220 0%, #22301F 55%, #17281D 100%);
+    linear-gradient(180deg, #4A3626 0%, #2E2117 55%, #211510 100%);
   background-size: cover, cover;
   background-position: center, center;
 }
@@ -679,7 +688,7 @@ textarea:focus-visible,
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(23, 40, 29, 0.38) 0%, rgba(23, 40, 29, 0.58) 55%, rgba(23, 40, 29, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(33, 21, 16, 0.38) 0%, rgba(33, 21, 16, 0.58) 55%, rgba(33, 21, 16, 0.9) 100%);
   z-index: -1;
 }
 
@@ -714,7 +723,7 @@ textarea:focus-visible,
   font-size: clamp(1.35rem, 3.6vw + 0.75rem, 2.5rem);
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--color-clay);
   line-height: 1.25;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 4px 20px rgba(0, 0, 0, 0.45);
 }
@@ -758,9 +767,9 @@ textarea:focus-visible,
 .hero .tagline {
   font-family: var(--font-display);
   font-style: italic;
-  font-weight: 600;
+  font-weight: 700;
   font-size: var(--text-script);
-  color: var(--color-gold);
+  color: var(--color-clay);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 4px 20px rgba(0, 0, 0, 0.45);
 }
 
@@ -824,10 +833,10 @@ textarea:focus-visible,
   display: block;
   font-family: var(--font-display);
   font-size: clamp(1.75rem, 3vw + 1rem, 2.75rem);
-  font-weight: 900;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
-  color: var(--color-gold);
+  color: var(--color-clay);
 }
 
 .countdown-label {
@@ -902,7 +911,7 @@ textarea:focus-visible,
    Сердечки у каждой отметки времени убраны — тёплую нотку в этом мире несёт
    не романтический декор, а сам материал (золото, гравировка), да и
    виноградная лоза с сердечками рядом не сочетается тематически. */
-.timeline-flourish path { stroke: var(--color-gold-deep); }
+.timeline-flourish path { stroke: var(--color-clay-deep); }
 .timeline-flourish-heart { display: none; }
 
 .timeline-item {
@@ -924,17 +933,17 @@ textarea:focus-visible,
 
 .timeline-time {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 700;
   font-size: clamp(2.75rem, 5vw + 1rem, 4.25rem);
   line-height: 0.95;
-  color: var(--color-gold-deep);
+  color: var(--color-clay-deep);
   font-variant-numeric: tabular-nums;
 }
 
 /* Второе время программы в винном акценте вместо золота — то же самое
    различение, что у виноделов между цветом урожая: два события дня,
    два оттенка одного материала, не два случайных цвета. Прямой
-   --color-wine (не отдельный светлый оттенок, как раньше) — секция
+   --color-olive (не отдельный светлый оттенок, как раньше) — секция
    светлая, тёмное вино само по себе даёт 10.7:1 на белом.
    :nth-of-type, не :nth-child — .timeline-flourish (svg) идёт первым
    внутри .timeline, так что :nth-child(2) на самом деле попадал на ПЕРВЫЙ
@@ -942,7 +951,7 @@ textarea:focus-visible,
    задумывалось. :nth-of-type считает только среди <div>-соседей того же
    тега, свг в счёт не идёт. Баг нашёлся только через автоматический
    accessibility-скан — визуально оба варианта смотрелись "нормально". */
-.timeline-item:nth-of-type(2) .timeline-time { color: var(--color-wine); }
+.timeline-item:nth-of-type(2) .timeline-time { color: var(--color-olive); }
 
 .timeline-time span {
   font-size: 0.5em;
@@ -1015,7 +1024,7 @@ textarea:focus-visible,
 .location-card .icon-pin {
   width: 24px;
   height: 24px;
-  color: var(--color-gold-deep);
+  color: var(--color-clay-deep);
 }
 
 .map-embed {
@@ -1044,13 +1053,12 @@ textarea:focus-visible,
   color: var(--color-ink-faint);
 }
 
-/* ---------- 10. Дресс-код — образцы как атласные лоскуты ----------
-   Были плоские прямоугольники сплошной заливки. Теперь — круглые
-   образцы с имитацией шёлковой драпировки (несколько слоёв градиента
-   поверх цвета — блик, диагональный отсвет, тень складки), подпись
-   вынесена под круг, а не поверх заливки. Круг — единственное осознанное
-   исключение из "прямые углы без исключений": имитирует отрез ткани,
-   а не UI-компонент, для которого это правило и придумано. */
+/* ---------- 10. Дресс-код — круглые образцы, сплошной цвет ----------
+   Были плоские прямоугольники, потом — та же идея кругом, но со слоями
+   градиента, имитирующими шёлковую драпировку. Градиент убран обратно —
+   ровная сплошная заливка, без бликов/теней складки. Круг остался
+   (единственное осознанное исключение из "прямые углы без исключений":
+   имитирует отрез ткани, а не UI-компонент), подпись под кругом. */
 
 .dresscode-section { padding-bottom: var(--space-8); }
 
@@ -1083,16 +1091,7 @@ textarea:focus-visible,
   width: 100%;
   aspect-ratio: 1;
   border-radius: 50%;
-  /* Слои сверху вниз: узкий блик сверху-слева (шёлк ловит свет),
-     широкая диагональная полоса светлого/тёмного (складка через весь
-     лоскут), мягкая тень снизу-справа (обратная сторона складки), и
-     сам цвет — снизу. Один и тот же рецепт для любого --swatch-color. */
-  background:
-    radial-gradient(120% 90% at 26% 16%, rgba(255, 255, 255, 0.6), transparent 42%),
-    linear-gradient(128deg, rgba(255, 255, 255, 0.34) 0%, transparent 26%, rgba(0, 0, 0, 0.22) 52%, transparent 76%, rgba(255, 255, 255, 0.2) 100%),
-    radial-gradient(75% 65% at 74% 82%, rgba(0, 0, 0, 0.34), transparent 55%),
-    var(--swatch-color);
-  box-shadow: 0 12px 22px -10px rgba(28, 43, 32, 0.4);
+  background: var(--swatch-color);
   transition: transform 0.15s var(--ease-out);
 }
 
@@ -1104,7 +1103,7 @@ textarea:focus-visible,
 
 .swatch-name {
   font-family: var(--font-label);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9rem;
   line-height: 1.1;
   text-align: center;
@@ -1128,7 +1127,7 @@ textarea:focus-visible,
   font-size: 1.4rem;
   font-weight: 700;
   color: #FFFCF5;
-  background: rgba(28, 43, 32, 0.55);
+  background: rgba(51, 36, 26, 0.55);
   opacity: 0;
   transition: opacity 0.2s var(--ease-out);
   pointer-events: none;
@@ -1151,51 +1150,18 @@ textarea:focus-visible,
   font-size: 0.95rem;
 }
 
-/* ---------- 11. Подарки — крупная цитата ---------- */
-
-.gifts-section { background: var(--color-bg-alt); }
-
-.gifts-inner {
-  position: relative;
-  max-width: 40rem;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.quote-mark {
-  display: block;
-  font-family: var(--font-display);
-  font-size: clamp(5rem, 10vw, 8rem);
-  line-height: 1;
-  color: var(--color-gold-deep);
-  opacity: 0.85;
-}
-
-.gifts-quote {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 700;
-  font-size: clamp(1.5rem, 2.6vw + 1rem, 2.75rem);
-  line-height: 1.25;
-  color: var(--color-ink);
-  margin-top: calc(-1 * var(--space-6));
-  max-width: none;
-}
-
-.gifts-note {
-  margin-top: var(--space-5);
-  color: var(--color-ink-soft);
-  margin-inline: auto;
-}
+/* ---------- 11. Секция «Подарки» убрана — .gifts-*/.quote-mark
+   были только для неё, дохлый CSS вычищен вместе с ней. ---------- */
 
 /* ---------- 12. RSVP и «Ведущий» — простые контакт-блоки ---------- */
 
 /* «Хотите сделать сюрприз?» — единственный заголовок, который вернули
-   на обычную гравированную Alegreya вместо связной скорописи: с
+   на обычную антикву (PT Serif) вместо связной скорописи: с
    вопросительным знаком и переносом на две строки рукописный шрифт
    читался заметно хуже, чем короткие заголовки-лейблы в других секциях. */
 #host h2 {
   font-family: var(--font-display);
+  font-weight: 700;
 }
 
 .contact-block {
@@ -1222,10 +1188,10 @@ textarea:focus-visible,
   gap: var(--space-2);
   font-family: var(--font-label);
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-on-dark);
-  background: var(--color-wine);
+  background: var(--color-olive);
   padding: var(--space-2) var(--space-4);
 }
 
@@ -1244,7 +1210,7 @@ textarea:focus-visible,
 /* Закрытие держится на том же фото, что и герой (пара идёт по дороге
    рука об руку) — та же логика тёмного острова: фон непредсказуем по
    яркости (небо, дорога, поле), поэтому весь текст здесь снова светлый
-   (--color-on-dark…) с тенью, а не приглушённый --color-gold-deep,
+   (--color-on-dark…) с тенью, а не приглушённый --color-clay-deep,
    который был нужен, пока секция была светлой. */
 .footer-hero {
   position: relative;
@@ -1262,7 +1228,7 @@ textarea:focus-visible,
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 25, 19, 0.5) 0%, rgba(14, 25, 19, 0.72) 100%);
+  background: linear-gradient(180deg, rgba(33, 21, 16, 0.5) 0%, rgba(33, 21, 16, 0.72) 100%);
   z-index: 0;
 }
 
@@ -1275,7 +1241,7 @@ textarea:focus-visible,
   font-weight: 400;
   font-size: clamp(14rem, 44vw, 32rem);
   line-height: 1;
-  color: var(--color-gold);
+  color: var(--color-clay);
   opacity: 0.16;
   pointer-events: none;
   z-index: 1;
@@ -1300,7 +1266,7 @@ textarea:focus-visible,
   display: block;
   font-size: var(--text-script);
   margin-top: var(--space-4);
-  color: var(--color-gold);
+  color: var(--color-clay);
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 4px 18px rgba(0, 0, 0, 0.45);
 }
 
@@ -1320,7 +1286,7 @@ textarea:focus-visible,
   gap: var(--space-2);
   margin-bottom: var(--space-2);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--color-ink-soft);
 }
 
