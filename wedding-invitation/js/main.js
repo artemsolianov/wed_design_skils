@@ -191,18 +191,6 @@
     const timer = setInterval(tick, 1000);
   }
 
-  /* ---------- Фото: аккуратный запасной вариант, если файла ещё нет ---------- */
-  document.querySelectorAll(".photo img").forEach((img) => {
-    img.addEventListener(
-      "error",
-      () => {
-        img.closest(".photo")?.classList.add("photo--empty");
-        img.remove();
-      },
-      { once: true }
-    );
-  });
-
   /* ---------- Дресс-код: копирование HEX по клику на образец ----------
      Образцы — настоящие <button>, так что фокус/Enter/Space уже работают
      из коробки, добавлять их вручную не нужно. */
