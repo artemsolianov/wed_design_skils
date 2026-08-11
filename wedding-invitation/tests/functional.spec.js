@@ -69,16 +69,6 @@ test('dresscode swatch copies its hex on click', async ({ page }) => {
   await expect(swatch).toHaveClass(/is-copied/);
 });
 
-test('floating RSVP button appears once the hero scrolls out of view', async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== 'mobile', 'the floating button is display:none from 900px up');
-  await page.goto('/');
-  const floating = page.locator('.floating-rsvp');
-  await expect(floating).not.toHaveClass(/is-visible/);
-
-  await page.locator('#program').scrollIntoViewIfNeeded();
-  await expect(floating).toHaveClass(/is-visible/);
-});
-
 test('keyboard focus ring is visible on interactive elements', async ({ page }) => {
   await page.goto('/');
   await page.keyboard.press('Tab');

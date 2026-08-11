@@ -50,28 +50,6 @@
     });
   }
 
-  /* ---------- Плавающая кнопка RSVP на мобильных ---------- */
-  const floatingRsvp = document.querySelector(".floating-rsvp");
-  const rsvpSection = document.getElementById("rsvp");
-  if (floatingRsvp && rsvpSection) {
-    const heroEl = document.querySelector(".hero");
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        floatingRsvp.classList.toggle("is-visible", !entry.isIntersecting);
-      },
-      { rootMargin: "0px 0px -60% 0px" }
-    );
-    if (heroEl) io.observe(heroEl);
-
-    const ioHideAtForm = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) floatingRsvp.classList.remove("is-visible");
-      },
-      { threshold: 0.2 }
-    );
-    ioHideAtForm.observe(rsvpSection);
-  }
-
   /* ---------- Скролл-реявл ----------
      Сознательно не полагаемся только на IntersectionObserver: при быстрой
      программной/анимированной прокрутке (в т.ч. переходах по якорным

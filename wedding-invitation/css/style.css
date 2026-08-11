@@ -225,23 +225,40 @@ ul {
 
 /* ---------- 3. Типографика ---------- */
 
-/* font-weight:400 намеренно — у Marck Script только одно начертание
-   (Regular), запрошенные 700/900 браузер бы дорисовывал сам (synthetic
-   bold), а для связной скорописи это почти всегда выглядит грязно —
-   штрихи утолщаются неровно и рвут соединения букв. Вес заголовков
-   держится размером и цветом, не начертанием. */
+/* Правило вёрстки: на странице ровно два шрифта в постоянной работе —
+   PT Serif (заголовки, числа-акценты) и PT Sans (текст, лейблы,
+   кнопки). Скоропись Marck Script — не третий шрифт "для заголовков",
+   а единственный, узко зарезервированный акцент ИМЕНИ пары: h1 героя,
+   лого в шапке, подпись в конце. Раньше скоропись стояла на ВСЕХ
+   заголовках (h1-h4) — на одном экране героя это давало 3-4 разных
+   почерка сразу (скоропись + курсивная антиква + прямая антиква +
+   капитель), читалось шумно, а не празднично. Теперь: h2/h3/h4 —
+   обычная PT Serif, как и весь остальной текст структуры; скоропись
+   встречается ровно в трёх местах на весь сайт, там, где буквально
+   написано "Артём & Юлия". */
 h1, h2, h3, h4 {
-  font-family: var(--font-script);
-  font-weight: 400;
-  /* Выше, чем 1.1 у прежней Alegreya: связная скоропись даёт росчерки
-     выше и ниже строки (заглавные, "р", "д"), при 1.1 они подрезались
-     соседними строками в многострочных заголовках. */
-  line-height: 1.3;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
   margin: 0;
   color: var(--color-ink);
 }
 
-h1 { font-size: var(--text-h1); letter-spacing: -0.01em; }
+/* h1 — единственный заголовок, который использует скоропись напрямую
+   (это герой, текст всегда "Артём & Юлия"). font-weight:400 у неё
+   намеренно ниже, чем у остальных заголовков: у Marck Script только
+   одно начертание (Regular), запрошенные 700/900 браузер дорисовывал
+   бы сам (synthetic bold), а для связной скорописи это почти всегда
+   выглядит грязно — штрихи утолщаются неровно и рвут соединения букв.
+   line-height выше, чем у остальных заголовков (1.3 против 1.15) — те
+   же росчерки выше/ниже строки. */
+h1 {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: var(--text-h1);
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
 h2 { font-size: var(--text-h2); }
 h3 { font-size: var(--text-h3); }
 
@@ -940,19 +957,6 @@ textarea:focus-visible,
   font-variant-numeric: tabular-nums;
 }
 
-/* Второе время программы в винном акценте вместо золота — то же самое
-   различение, что у виноделов между цветом урожая: два события дня,
-   два оттенка одного материала, не два случайных цвета. Прямой
-   --color-olive (не отдельный светлый оттенок, как раньше) — секция
-   светлая, тёмное вино само по себе даёт 10.7:1 на белом.
-   :nth-of-type, не :nth-child — .timeline-flourish (svg) идёт первым
-   внутри .timeline, так что :nth-child(2) на самом деле попадал на ПЕРВЫЙ
-   .timeline-item (14:30, церемония), а не на второй (16:00, банкет), как
-   задумывалось. :nth-of-type считает только среди <div>-соседей того же
-   тега, свг в счёт не идёт. Баг нашёлся только через автоматический
-   accessibility-скан — визуально оба варианта смотрелись "нормально". */
-.timeline-item:nth-of-type(2) .timeline-time { color: var(--color-olive); }
-
 .timeline-time span {
   font-size: 0.5em;
   font-weight: 700;
@@ -1155,15 +1159,6 @@ textarea:focus-visible,
 
 /* ---------- 12. RSVP и «Ведущий» — простые контакт-блоки ---------- */
 
-/* «Хотите сделать сюрприз?» — единственный заголовок, который вернули
-   на обычную антикву (PT Serif) вместо связной скорописи: с
-   вопросительным знаком и переносом на две строки рукописный шрифт
-   читался заметно хуже, чем короткие заголовки-лейблы в других секциях. */
-#host h2 {
-  font-family: var(--font-display);
-  font-weight: 700;
-}
-
 .contact-block {
   max-width: 28rem;
   margin-inline: auto;
@@ -1205,37 +1200,32 @@ textarea:focus-visible,
   color: var(--color-ink-faint);
 }
 
+.rsvp-chats-label {
+  margin-top: var(--space-4);
+  font-size: 0.85rem;
+  color: var(--color-ink-faint);
+}
+
+.rsvp-chats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
 /* ---------- 13. Подвал ---------- */
 
-/* Закрытие держится на том же фото, что и герой (пара идёт по дороге
-   рука об руку) — та же логика тёмного острова: фон непредсказуем по
-   яркости (небо, дорога, поле), поэтому весь текст здесь снова светлый
-   (--color-on-dark…) с тенью, а не приглушённый --color-clay-deep,
-   который был нужен, пока секция была светлой. */
+/* Фото убрано из фона закрытия — снова просто светлая секция
+   (bg-alt → bg), фото теперь отдельным кадром ниже, в .closing-photo. */
 .footer-hero {
   position: relative;
   padding-block: var(--space-9);
   text-align: center;
   overflow: hidden;
-  background-image:
-    url('../assets/photos/footer-road.jpg'),
-    linear-gradient(180deg, var(--color-bg-alt), var(--color-bg));
-  background-size: cover;
-  background-position: center 30%;
+  background: linear-gradient(180deg, var(--color-bg-alt), var(--color-bg));
 }
 
-.footer-hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(33, 21, 16, 0.5) 0%, rgba(33, 21, 16, 0.72) 100%);
-  z-index: 0;
-}
-
-/* Непрозрачность снижена (0.16 → 0.1) — росчерк Marck Script крупнее и
-   размашистее, чем был у прежнего шрифта, и на мобильном, где строки
-   заголовка/подписи короче и он проходит прямо через весь текстовый
-   блок, а не только фоном за одной строкой, 0.16 спорил с текстом. */
 .footer-hero-mark {
   position: absolute;
   top: 50%;
@@ -1245,33 +1235,37 @@ textarea:focus-visible,
   font-weight: 400;
   font-size: clamp(14rem, 44vw, 32rem);
   line-height: 1;
-  color: var(--color-clay);
-  opacity: 0.1;
+  color: var(--color-clay-deep);
+  opacity: 0.14;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
 }
 
 .footer-hero .container {
   position: relative;
-  z-index: 2;
-  color: var(--color-on-dark);
-}
-
-.footer-hero h2,
-.footer-hero .lead {
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 4px 18px rgba(0, 0, 0, 0.45);
-}
-
-.footer-hero .lead {
-  color: var(--color-on-dark-soft);
+  z-index: 1;
 }
 
 .footer-hero .script-accent {
   display: block;
   font-size: var(--text-script);
   margin-top: var(--space-4);
-  color: var(--color-clay);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+
+/* Фото со съёмки — пара идёт по дороге рука об руку — как обычный кадр
+   в конце ленты, а не фон секции: прямоугольник с тонкой рамкой, тот же
+   приём, что и у карточек локаций/подарков, не на всю ширину экрана. */
+.closing-photo {
+  max-width: 40rem;
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+  padding-block: var(--space-8);
+}
+
+.closing-photo img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-line-strong);
 }
 
 .site-footer {
@@ -1294,28 +1288,13 @@ textarea:focus-visible,
   color: var(--color-ink-soft);
 }
 
-/* ---------- 14. Плавающая кнопка RSVP (моб.) ---------- */
-
-.floating-rsvp {
-  position: fixed;
-  left: var(--space-4);
-  right: var(--space-4);
-  bottom: calc(var(--space-4) + env(safe-area-inset-bottom));
-  z-index: 90;
-  transform: translateY(calc(100% + var(--space-4) + 40px));
-  visibility: hidden;
-  transition: transform 0.3s var(--ease-out), visibility 0s linear 0.3s;
-}
-
-.floating-rsvp.is-visible {
-  transform: translateY(0);
-  visibility: visible;
-  transition: transform 0.3s var(--ease-out);
-}
-
-@media (min-width: 900px) {
-  .floating-rsvp { display: none; }
-}
+/* ---------- 14. Плавающая кнопка RSVP убрана целиком — мешала
+   в скролле (у неё была ошибка отступа справа: .btn-block{width:100%}
+   спорил с left/right:var(--space-4) на fixed-элементе, из-за чего
+   кнопка вылезала за правый край на некоторых ширинах), плюс отдельная
+   плавающая кнопка поверх контента — не то, что нужно на спокойной
+   странице. Дорога к RSVP и так короткая: пункт в шапке/меню + сам
+   раздел ниже по странице. ---------- */
 
 /* ---------- 15. Скролл-реявл ---------- */
 
