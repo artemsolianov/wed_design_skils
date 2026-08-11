@@ -1232,6 +1232,10 @@ textarea:focus-visible,
   z-index: 0;
 }
 
+/* Непрозрачность снижена (0.16 → 0.1) — росчерк Marck Script крупнее и
+   размашистее, чем был у прежнего шрифта, и на мобильном, где строки
+   заголовка/подписи короче и он проходит прямо через весь текстовый
+   блок, а не только фоном за одной строкой, 0.16 спорил с текстом. */
 .footer-hero-mark {
   position: absolute;
   top: 50%;
@@ -1242,7 +1246,7 @@ textarea:focus-visible,
   font-size: clamp(14rem, 44vw, 32rem);
   line-height: 1;
   color: var(--color-clay);
-  opacity: 0.16;
+  opacity: 0.1;
   pointer-events: none;
   z-index: 1;
 }
