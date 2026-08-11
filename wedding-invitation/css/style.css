@@ -745,8 +745,8 @@ textarea:focus-visible,
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 4px 20px rgba(0, 0, 0, 0.45);
 }
 
-/* Тень усилена (была одна мягкая 0.35) и у h1, и добавлена трём соседям
-   ниже (.tagline/.hero-date/.lead), у которых её не было вовсе — фото
+/* Тень усилена (была одна мягкая 0.35) и у h1, и добавлена соседям
+   ниже (.hero-date/.lead), у которых её не было вовсе — фото
    кадрируется cover по центру и на разных экранах солнце оказывается
    в разных местах кадра, так что рассчитывать на конкретную тёмную зону
    градиента под конкретным текстом нельзя. Тень должна держать текст
@@ -779,15 +779,6 @@ textarea:focus-visible,
 
 @media (prefers-reduced-motion: reduce) {
   .hero-reveal { opacity: 1; transform: none; animation: none; }
-}
-
-.hero .tagline {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 700;
-  font-size: var(--text-script);
-  color: var(--color-clay);
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55), 0 4px 20px rgba(0, 0, 0, 0.45);
 }
 
 .hero .lead {
