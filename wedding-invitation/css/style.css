@@ -1243,10 +1243,13 @@ textarea:focus-visible,
   color: var(--color-ink-faint);
 }
 
+/* Была мелкая блёклая подпись (0.85rem, ink-faint, <p>) — терялась
+   рядом с кнопками. Теперь настоящий <h3> — тот же вес, что у h3
+   в остальной иерархии страницы (PT Serif, обычный --color-ink,
+   размер берётся из общего правила h3 ниже по каскаду), не отдельный
+   мелкий лейбл. */
 .rsvp-chats-label {
-  margin-top: var(--space-4);
-  font-size: 0.85rem;
-  color: var(--color-ink-faint);
+  margin-top: var(--space-5);
 }
 
 .rsvp-chats {
