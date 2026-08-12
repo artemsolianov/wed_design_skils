@@ -63,7 +63,7 @@ body {
   min-height: 100svh;
   font-family: var(--font-body);
   font-size: var(--text-body);
-  line-height: 1.7;
+  line-height: 1.6;
   color: var(--color-ink);
   background: var(--color-bg);
   -webkit-font-smoothing: antialiased;
@@ -209,7 +209,9 @@ ul {
      того же мира. */
   --font-script: 'Snell Roundhand', var(--font-display);
 
-  /* Модульная сетка отступов (кратна 4px) */
+  /* Модульная сетка отступов (кратна 4px). --space-9 снижен с 6rem до
+     5rem — секции читались избыточно просторными на фоне того, что
+     сами блоки внутри стали короче (тексты сжаты этим же заходом). */
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 0.75rem;
@@ -218,17 +220,20 @@ ul {
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4rem;
-  --space-9: 6rem;
+  --space-9: 5rem;
   --space-10: 8rem;
 
   /* Текучая типографика: минимум на 375px, максимум на 1440px.
-     h1 — потолок 6rem, длина строки — 66-70ch (комфортный читаемый диапазон). */
+     h1 — потолок снижен с 6rem до 5rem: имя пары конкурировало по весу
+     со всей остальной иерархией страницы. Тело текста поднято к
+     17-19px (было 16-17) — заметнее разница с мелким/служебным текстом.
+     Длина строки — 66-70ch (комфортный читаемый диапазон). */
   --text-eyebrow: clamp(0.75rem, 0.6vw + 0.65rem, 0.875rem);
-  --text-body: clamp(1rem, 0.25vw + 0.95rem, 1.0625rem);
+  --text-body: clamp(1.0625rem, 0.3vw + 1rem, 1.1875rem);
   --text-lead: clamp(1.125rem, 0.6vw + 1rem, 1.375rem);
   --text-h3: clamp(1.25rem, 1vw + 1.05rem, 1.625rem);
   --text-h2: clamp(1.75rem, 2.2vw + 1.2rem, 2.75rem);
-  --text-h1: clamp(3rem, 7vw + 1rem, 6rem);
+  --text-h1: clamp(3rem, 6vw + 1rem, 5rem);
   --text-script: clamp(1.5rem, 2vw + 1rem, 2.25rem);
 
   /* Прямые углы без исключений. */
@@ -409,13 +414,16 @@ textarea:focus-visible,
   background: var(--color-bg-alt);
 }
 
+/* Ширина сужена с 46rem — вступления теперь короткие (1-2 строки),
+   широкий короб только удлинял бы им строку без нужды. */
 .section-head {
-  max-width: 46rem;
+  max-width: 36rem;
   margin-bottom: var(--space-7);
 }
 
 .section-head p {
-  margin-top: var(--space-3);
+  margin-top: var(--space-5);
+  max-width: 28em;
 }
 
 .divider {
@@ -548,12 +556,12 @@ textarea:focus-visible,
   display: inline-flex;
 }
 
-/* .nav-desktop a (0,1,1) специфичнее .btn-outline (0,1,0) — без этого
+/* .nav-desktop a (0,1,1) специфичнее .btn-secondary (0,1,0) — без этого
    переопределения текст кнопки в шапке наследует блёклый цвет обычных
-   пунктов меню вместо тёмного цвета самой кнопки (та же ловушка, что уже
-   один раз ловили на скриншоте в прошлой версии). */
+   пунктов меню вместо собственного светлого цвета кнопки (та же ловушка,
+   что уже один раз ловили на скриншоте в прошлой версии). */
 .site-header .nav-cta {
-  color: var(--color-parchment-ink);
+  color: var(--color-on-dark);
 }
 
 /* Кнопка меню — не текст на прозрачной шапке, а самостоятельный светлый
@@ -565,9 +573,9 @@ textarea:focus-visible,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: 1.5px solid var(--color-clay-deep);
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--color-clay-deep);
   background: var(--color-bg-alt);
   color: var(--color-ink);
   cursor: pointer;
@@ -627,10 +635,16 @@ textarea:focus-visible,
   justify-content: center;
 }
 
-/* ---------- 6. Кнопки ----------
-   Заливка сплошная и непрозрачная всегда — той же паре цветов не нужно
-   отдельно перекрашиваться между "поверх фото" и "на пергаментной
-   карточке": кнопка везде читается одинаково. */
+/* ---------- 6. Кнопки — три уровня веса, не один тип на всё ----------
+   Раньше на странице было по сути два визуально равных типа кнопки
+   (сплошная светлая заливка с рамкой / другая сплошная заливка с
+   рамкой) — рядом друг с другом (например, в hero) они читались как
+   два одинаково тяжёлых прямоугольника, хотя по смыслу один — главное
+   действие, второй — просто переход к программе. Теперь три уровня:
+   primary (заливка, самый тяжёлый — "позвони/подтверди"), secondary
+   (обводка на тёмных участках — hero, шапка), tertiary (лёгкая, почти
+   без рамки — карта, чаты: вспомогательные переходы). Ссылки и
+   назначения кнопок не меняются, только вес. */
 
 .btn {
   display: inline-flex;
@@ -644,34 +658,45 @@ textarea:focus-visible,
   font-size: 0.95rem;
   letter-spacing: 0.03em;
   text-decoration: none;
-  border: 1.5px solid transparent;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 0.15s var(--ease-out), background-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
+  transition: transform 0.15s var(--ease-out), background-color 0.2s var(--ease-out), color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
   -webkit-tap-highlight-color: transparent;
 }
 
 .btn:active { transform: scale(0.97); }
 
-/* Заливка всегда var(--color-bg) — то есть теперь всегда белая, независимо
-   от секции. В «RSVP» это буквально тот же белый, что и страница вокруг:
-   единственное, что вообще отделяет кнопку от поля — эта рамка, поэтому
-   ей нужен свой надёжный контраст (gold-deep, 6.9:1), а не декоративный
-   яркий (2.4:1, там кнопка бы читалась почти без края). */
+/* Primary — сплошная заливка глиной: самый тяжёлый уровень, ровно для
+   тех кнопок, где ждём реального действия (позвонить, подтвердить).
+   Текст светлый (on-dark) и на тёмном фоне героя, и на белой/пергаментной
+   карточке — заливка везде одна и та же, ей не нужно знать про фон
+   вокруг. Контраст текста на заливке — 4.74:1 (посчитано отдельно). */
 .btn-primary {
-  background: var(--color-bg);
+  background: var(--color-clay-deep);
   border-color: var(--color-clay-deep);
-  color: var(--color-ink);
+  color: var(--color-on-dark);
 }
 
-/* border-color раньше был var(--color-bg) — тогда это давало тонкую
-   рамку в цвет всего зелёного поля страницы. Теперь поле белое, а эта
-   кнопка чаще всего лежит НА пергаментной карточке того же тона, что и
-   её заливка — рамке нужен собственный тёмный цвет, не зависящий от
-   фона страницы вокруг. */
-.btn-outline {
-  background: var(--color-parchment);
-  border-color: var(--color-parchment-ink);
-  color: var(--color-parchment-ink);
+/* Secondary — только на тёмных участках (hero, шапка): прозрачная
+   заливка, светлая обводка. Второе действие рядом с primary — заметно
+   легче него, но не теряется на фото. */
+.btn-secondary {
+  background: transparent;
+  border-color: var(--color-on-dark-soft);
+  color: var(--color-on-dark);
+}
+
+/* Tertiary — вспомогательные переходы на светлых участках (карта, чаты):
+   самый лёгкий уровень, почти текстовая ссылка в рамке. Меньше паддинг
+   и кегль — не должна спорить весом с primary/secondary на той же
+   странице. */
+.btn-tertiary {
+  min-height: 44px;
+  padding: var(--space-2) var(--space-5);
+  font-size: 0.85rem;
+  background: transparent;
+  border-color: var(--color-line-strong);
+  color: var(--color-ink-soft);
 }
 
 /* Hover gated behind (hover:hover) and (pointer:fine) — these buttons are
@@ -679,8 +704,9 @@ textarea:focus-visible,
    leaves the hover background "stuck" on until the guest taps elsewhere;
    :active below already gives touch its own, immediate feedback. */
 @media (hover: hover) and (pointer: fine) {
-  .btn-primary:hover { background: var(--color-bg-alt); }
-  .btn-outline:hover { background: var(--color-parchment-alt); }
+  .btn-primary:hover { background: var(--color-ink); border-color: var(--color-ink); }
+  .btn-secondary:hover { background: rgba(242, 230, 211, 0.1); border-color: var(--color-on-dark); }
+  .btn-tertiary:hover { background: var(--color-bg-alt); border-color: var(--color-ink-faint); }
 }
 
 .btn-block { width: 100%; }
@@ -838,21 +864,25 @@ textarea:focus-visible,
 /* Обратный отсчёт — строка мелкой этикеточной печати, а не плитки
    "большая цифра / подпись": ровно тот шаблон карточек-метрик, который
    стоит избегать, когда его можно не использовать. Тонкие вертикальные
-   линии вместо рамок-боксов. */
+   линии вместо рамок-боксов. Не главный элемент hero — имена и короткое
+   приглашение выше него весят больше, поэтому кегль цифр и вес
+   разделителей снижены (было 1.75-2.75rem/strong-линия, стало
+   1.4-2rem/обычная), а верхний отступ уже не тянет его к CTA как
+   отдельный тяжёлый блок. */
 .countdown {
   display: flex;
   justify-content: center;
   align-items: stretch;
   flex-wrap: wrap;
-  margin-top: var(--space-5);
+  margin-top: var(--space-4);
 }
 
 .countdown-cell {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-inline: clamp(0.5rem, 3vw, var(--space-6));
-  border-left: 1px solid var(--color-line-on-dark-strong);
+  padding-inline: clamp(0.4rem, 2.4vw, var(--space-5));
+  border-left: 1px solid var(--color-line-on-dark);
   min-width: 0;
 }
 
@@ -861,7 +891,7 @@ textarea:focus-visible,
 .countdown-num {
   display: block;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 3vw + 1rem, 2.75rem);
+  font-size: clamp(1.4rem, 2vw + 0.9rem, 2rem);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -872,7 +902,7 @@ textarea:focus-visible,
   display: block;
   margin-top: var(--space-2);
   font-family: var(--font-label);
-  font-size: 0.65rem;
+  font-size: 0.63rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-on-dark-faint);
@@ -939,8 +969,10 @@ textarea:focus-visible,
    Приглушённая gold-deep, не яркая — секция «Программа дня» светлая.
    Сердечки у каждой отметки времени убраны — тёплую нотку в этом мире несёт
    не романтический декор, а сам материал (золото, гравировка), да и
-   виноградная лоза с сердечками рядом не сочетается тематически. */
-.timeline-flourish path { stroke: var(--color-clay-deep); }
+   виноградная лоза с сердечками рядом не сочетается тематически. Толщина
+   и непрозрачность снижены (было 1.3/inline без opacity) — линия теперь
+   тише, не спорит с самими блоками времени. */
+.timeline-flourish path { stroke: var(--color-clay-deep); stroke-width: 1; opacity: 0.55; }
 .timeline-flourish-heart { display: none; }
 
 .timeline-item {
@@ -969,10 +1001,13 @@ textarea:focus-visible,
   font-variant-numeric: tabular-nums;
 }
 
+/* Минуты читались отдельной мелкой подписью (0.5em + другой цвет) —
+   время должно читаться одним значением, не часом с довеском. Тот же
+   цвет, что у часов, кегль поднят до 0.72em. */
 .timeline-time span {
-  font-size: 0.5em;
+  font-size: 0.72em;
   font-weight: 700;
-  color: var(--color-ink-faint);
+  color: var(--color-clay-deep);
 }
 
 .timeline-tag {
@@ -980,7 +1015,7 @@ textarea:focus-visible,
   margin-top: var(--space-2);
   margin-bottom: var(--space-3);
   padding-bottom: var(--space-1);
-  border-bottom: 1px solid var(--color-line-strong);
+  border-bottom: 1px solid var(--color-line);
   font-family: var(--font-label);
   color: var(--color-ink-soft);
   font-size: 0.8rem;
@@ -1018,10 +1053,12 @@ textarea:focus-visible,
    (.section--dark сама светлая, var(--color-bg-alt)): два близких кремовых
    тона рядом. Белая заливка отделяет карточку от поля секции по-настоящему,
    а не по имени класса. */
+/* Рамка ослаблена с --color-line-strong до --color-line — граница ещё
+   видна, но не спорит по весу с самой карточкой. */
 .location-card {
   background: var(--color-bg);
   color: var(--color-parchment-ink);
-  border: 1px solid var(--color-line-strong);
+  border: 1px solid var(--color-line);
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
@@ -1041,6 +1078,14 @@ textarea:focus-visible,
   color: var(--color-parchment-ink);
 }
 
+/* Адрес/время — вторичный текст под названием места: мельче и мягче
+   тоном, название карточки (h3) остаётся единственным, что берёт
+   основной вес. */
+.location-card p {
+  font-size: 0.92em;
+  color: var(--color-parchment-ink-soft);
+}
+
 .location-card .icon-pin {
   width: 24px;
   height: 24px;
@@ -1052,7 +1097,7 @@ textarea:focus-visible,
   width: 100%;
   height: 360px;
   overflow: hidden;
-  border: 1px solid var(--color-line-strong);
+  border: 1px solid var(--color-line);
   background: var(--color-bg-alt);
 }
 
@@ -1115,12 +1160,33 @@ textarea:focus-visible,
   color: var(--color-ink);
 }
 
+/* Правильный круг с жёсткими полосами читался слишком "цифровым" — как
+   иконка, не как образец ткани. Форма сделана мягкой, чуть неровной
+   (organic blob, у каждого образца — свой вариант радиуса, не один
+   штамп ×4), плюс тонкая рамка и лёгкая тень "приподнятости" — ближе к
+   вырезанному лоскуту бумаги/ткани на столе, чем к UI-плашке. Полосы
+   цвета внутри остаются плоскими (без градиентного блика — тот эффект
+   уже отклоняли раньше). */
 .swatch-circle {
   width: 100%;
   aspect-ratio: 1;
   max-width: 140px;
-  border-radius: 50%;
+  border-radius: 44% 56% 57% 43% / 43% 41% 59% 57%;
   background: var(--swatch-gradient);
+  border: 1px solid rgba(51, 36, 26, 0.12);
+  box-shadow: 0 1px 0 rgba(51, 36, 26, 0.08), 0 10px 18px -14px rgba(51, 36, 26, 0.45);
+}
+
+.swatch:nth-child(2) .swatch-circle {
+  border-radius: 58% 42% 45% 55% / 55% 45% 55% 45%;
+}
+
+.swatch:nth-child(3) .swatch-circle {
+  border-radius: 48% 52% 38% 62% / 60% 48% 52% 40%;
+}
+
+.swatch:nth-child(4) .swatch-circle {
+  border-radius: 40% 60% 55% 45% / 48% 58% 42% 52%;
 }
 
 .swatch-name {
@@ -1212,10 +1278,13 @@ textarea:focus-visible,
 /* ---------- 13. Подвал ---------- */
 
 /* Фото убрано из фона закрытия — снова просто светлая секция
-   (bg-alt → bg), фото теперь отдельным кадром ниже, в .closing-photo. */
+   (bg-alt → bg), фото теперь отдельным кадром ниже, в .closing-photo.
+   Нижний паддинг уменьшен относительно верхнего (было симметрично
+   var(--space-9) сверху и снизу) — текст и фото ниже должны читаться
+   одной связкой, а не двумя блоками с воздухом между ними. */
 .footer-hero {
   position: relative;
-  padding-block: var(--space-9);
+  padding-block: var(--space-9) var(--space-7);
   text-align: center;
   overflow: hidden;
   background: linear-gradient(180deg, var(--color-bg-alt), var(--color-bg));

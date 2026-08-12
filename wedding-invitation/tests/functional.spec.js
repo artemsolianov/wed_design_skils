@@ -66,7 +66,7 @@ test('dresscode palette shows four tone families', async ({ page }) => {
 
   const swatches = page.locator('.palette-strip .swatch');
   await expect(swatches).toHaveCount(4);
-  for (const name of ['Оттенки бежевого', 'Оттенки коричневого', 'Оттенки зелёного', 'Оттенки синего']) {
+  for (const name of ['Бежевый', 'Коричневый', 'Зелёный', 'Голубой']) {
     await expect(page.locator('.swatch-name', { hasText: name })).toBeVisible();
   }
 });
@@ -82,7 +82,7 @@ test('hero CTA buttons are equal width when stacked on narrow phones', async ({ 
   test.skip(testInfo.project.name !== 'mobile', 'width-stacking rule only applies below 480px');
   await page.goto('/');
   const primary = page.locator('.hero-actions .btn-primary');
-  const outline = page.locator('.hero-actions .btn-outline');
-  const [primaryBox, outlineBox] = await Promise.all([primary.boundingBox(), outline.boundingBox()]);
-  expect(Math.abs((primaryBox?.width ?? 0) - (outlineBox?.width ?? 0))).toBeLessThan(1);
+  const secondary = page.locator('.hero-actions .btn-secondary');
+  const [primaryBox, secondaryBox] = await Promise.all([primary.boundingBox(), secondary.boundingBox()]);
+  expect(Math.abs((primaryBox?.width ?? 0) - (secondaryBox?.width ?? 0))).toBeLessThan(1);
 });
