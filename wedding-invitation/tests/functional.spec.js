@@ -66,7 +66,7 @@ test('dresscode palette shows three tone families', async ({ page }) => {
 
   const swatches = page.locator('.palette-strip .swatch');
   await expect(swatches).toHaveCount(3);
-  for (const name of ['Оттенки бежевого', 'Оттенки зелёного', 'Небесно-голубой']) {
+  for (const name of ['Оттенки бежевого', 'Оттенки зелёного', 'Оттенки синего']) {
     await expect(page.locator('.swatch-name', { hasText: name })).toBeVisible();
   }
 });
