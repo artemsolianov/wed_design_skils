@@ -60,13 +60,13 @@ test('mobile menu opens and closes, and closes on link click', async ({ page }, 
   await expect(menu).not.toHaveClass(/is-open/);
 });
 
-test('dresscode palette shows three tone families', async ({ page }) => {
+test('dresscode palette shows four tone families', async ({ page }) => {
   await page.goto('/');
   await page.locator('#dresscode').scrollIntoViewIfNeeded();
 
   const swatches = page.locator('.palette-strip .swatch');
-  await expect(swatches).toHaveCount(3);
-  for (const name of ['Оттенки бежевого', 'Оттенки зелёного', 'Оттенки синего']) {
+  await expect(swatches).toHaveCount(4);
+  for (const name of ['Оттенки бежевого', 'Оттенки коричневого', 'Оттенки зелёного', 'Оттенки синего']) {
     await expect(page.locator('.swatch-name', { hasText: name })).toBeVisible();
   }
 });
