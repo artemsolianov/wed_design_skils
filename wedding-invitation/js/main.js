@@ -169,22 +169,4 @@
     const timer = setInterval(tick, 1000);
   }
 
-  /* ---------- Дресс-код: копирование HEX по клику на образец ----------
-     Образцы — настоящие <button>, так что фокус/Enter/Space уже работают
-     из коробки, добавлять их вручную не нужно. */
-  document.querySelectorAll(".swatch[data-hex]").forEach((swatch) => {
-    const hex = swatch.dataset.hex;
-    swatch.setAttribute("aria-label", `${swatch.querySelector(".swatch-name")?.textContent ?? ""}: скопировать код цвета ${hex}`);
-
-    swatch.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(hex);
-        swatch.classList.add("is-copied");
-        setTimeout(() => swatch.classList.remove("is-copied"), 1400);
-      } catch (_) {
-        /* буфер обмена недоступен — молча игнорируем, это необязательная приятность */
-      }
-    });
-  });
-
 })();

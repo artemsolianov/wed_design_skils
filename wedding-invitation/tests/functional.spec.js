@@ -60,13 +60,15 @@ test('mobile menu opens and closes, and closes on link click', async ({ page }, 
   await expect(menu).not.toHaveClass(/is-open/);
 });
 
-test('dresscode swatch copies its hex on click', async ({ page }) => {
+test('dresscode palette shows three tone families', async ({ page }) => {
   await page.goto('/');
   await page.locator('#dresscode').scrollIntoViewIfNeeded();
 
-  const swatch = page.locator('.swatch[data-hex="#D8BFA0"]');
-  await swatch.click();
-  await expect(swatch).toHaveClass(/is-copied/);
+  const swatches = page.locator('.palette-strip .swatch');
+  await expect(swatches).toHaveCount(3);
+  for (const name of ['Оттенки бежевого', 'Оттенки зелёного', 'Небесно-голубой']) {
+    await expect(page.locator('.swatch-name', { hasText: name })).toBeVisible();
+  }
 });
 
 test('keyboard focus ring is visible on interactive elements', async ({ page }) => {

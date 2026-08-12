@@ -1069,23 +1069,22 @@ textarea:focus-visible,
   color: var(--color-ink-faint);
 }
 
-/* ---------- 10. Дресс-код — круглые образцы, сплошной цвет ----------
-   Были плоские прямоугольники, потом — та же идея кругом, но со слоями
-   градиента, имитирующими шёлковую драпировку. Градиент убран обратно —
-   ровная сплошная заливка, без бликов/теней складки. Круг остался
-   (единственное осознанное исключение из "прямые углы без исключений":
-   имитирует отрез ткани, а не UI-компонент), подпись под кругом. */
+/* ---------- 10. Дресс-код — семейства тонов, не точные цвета ----------
+   Было восемь кругов-кнопок с точным hex под каждым — гость мог решить,
+   что подходит только один из восьми конкретных цветов. Заменено на три
+   круга-градиента (бежевый / зелёный / голубой), под каждым — словесный
+   диапазон вместо hex: это диапазон оттенков, а не образец для точного
+   попадания. Клик-копирование убрано вместе с точными кодами — круги
+   больше не кнопки, а просто иллюстрация трёх семейств. */
 
 .dresscode-section { padding-bottom: var(--space-8); }
 
-/* Grid с фиксированным числом колонок, не flex-wrap: восемь образцов
-   при wrap "по остатку места" на части ширин рассыпались — семь в
-   ряд, восьмой съезжал одиноко на новую строку. Grid всегда делит
-   8 ровно: 2 колонки (4×2) на телефоне, 4 колонки (2×4) от 560px —
-   никогда не остаётся сиротой один элемент в последнем ряду. */
+/* Три карточки — просто одна колонка на телефоне (читаются сверху вниз),
+   три в ряд от 560px. И 1, и 3 делят 3 ровно, сирот не бывает ни на
+   одной ширине (в отличие от прежней сетки под восемь образцов). */
 .palette-strip {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   justify-items: center;
   gap: var(--space-6) var(--space-5);
   margin-top: var(--space-7);
@@ -1093,38 +1092,25 @@ textarea:focus-visible,
 }
 
 @media (min-width: 560px) {
-  .palette-strip { grid-template-columns: repeat(4, 1fr); }
+  .palette-strip { grid-template-columns: repeat(3, 1fr); }
 }
 
 .swatch {
-  appearance: none;
-  border: 0;
-  background: none;
-  font: inherit;
-  cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-3);
   width: 100%;
-  max-width: 150px;
+  max-width: 180px;
   color: var(--color-ink);
-  -webkit-tap-highlight-color: transparent;
 }
 
 .swatch-circle {
-  position: relative;
   width: 100%;
   aspect-ratio: 1;
+  max-width: 140px;
   border-radius: 50%;
-  background: var(--swatch-color);
-  transition: transform 0.15s var(--ease-out);
-}
-
-/* Тактильный отклик на нажатие — свотч реальная кнопка (клик копирует
-   hex), отклик уместен ровно как на любой другой нажимаемой поверхности. */
-.swatch:active .swatch-circle {
-  transform: scale(0.94);
+  background: var(--swatch-gradient);
 }
 
 .swatch-name {
@@ -1135,39 +1121,13 @@ textarea:focus-visible,
   text-align: center;
 }
 
-.swatch-hex {
+.swatch-note {
   display: block;
   margin-top: calc(-1 * var(--space-2));
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+  line-height: 1.3;
+  text-align: center;
   color: var(--color-ink-faint);
-}
-
-.swatch-copied {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #FFFCF5;
-  background: rgba(51, 36, 26, 0.55);
-  opacity: 0;
-  transition: opacity 0.2s var(--ease-out);
-  pointer-events: none;
-}
-
-.swatch.is-copied .swatch-copied { opacity: 1; }
-
-.swatch:focus-visible .swatch-circle {
-  /* Не var(--color-focus) — эти круги не часть общей светлой/тёмной
-     системы страницы, это сами цвета дресс-кода (среди них попадаются
-     и тёмные, и светлые), поэтому кольцо фокуса фиксированно тёмное и
-     не зависит от темы страницы вовсе. */
-  outline: 3px solid var(--color-parchment-ink);
-  outline-offset: 3px;
 }
 
 .dresscode-legend {
