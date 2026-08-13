@@ -13,6 +13,14 @@ produced using them.
 типографики бюро Горбунова. Подробности, включая как добавить реальные фото,
 точный адрес на карте и приём заявок RSVP — в `wedding-invitation/README.md`.
 
+**Публикация сайта:** корень этого репозитория — не сайт (здесь README про
+скиллы и проекты, .claude/ и т.д.), поэтому GitHub Pages в режиме "Deploy
+from a branch" опубликует не сайт, а этот файл. Публикуется сайт через
+`.github/workflows/deploy-wedding-site.yml` — включите **Settings → Pages →
+Source → GitHub Actions** (не "Deploy from a branch"), дальше workflow сам
+соберёт и выложит `wedding-invitation/` при пуше в эту ветку. Подробнее —
+в `wedding-invitation/README.md`, раздел «Как проверить и опубликовать».
+
 ## Skills
 
 ### `ui-ux-pro-max`

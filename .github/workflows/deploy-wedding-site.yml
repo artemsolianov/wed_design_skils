@@ -1,0 +1,47 @@
+name: Deploy wedding invitation to GitHub Pages
+
+# Публикует ТОЛЬКО wedding-invitation/ — не корень репозитория.
+# Корень содержит README.md про сам репозиторий (скиллы + проекты), .claude/
+# со скиллами и .mcp.json — при публикации "из корня" GitHub Pages рендерит
+# именно этот README вместо сайта (ровно то, что уже случилось). Этот
+# workflow вместо этого собирает Pages-артефакт из подпапки с сайтом.
+#
+# Триггер — push в claude/ui-ux-pro-max-skill-xcr685, потому что это
+# единственная и фактически основная (default) ветка репозитория сейчас.
+# Если позже заведёте настоящий main и сделаете его default-веткой —
+# поменяйте имя ветки в двух местах ниже.
+on:
+  push:
+    branches: [claude/ui-ux-pro-max-skill-xcr685]
+    paths:
+      - wedding-invitation/**
+      - .github/workflows/deploy-wedding-site.yml
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload wedding-invitation/ as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: wedding-invitation
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

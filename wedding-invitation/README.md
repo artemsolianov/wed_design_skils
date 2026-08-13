@@ -80,9 +80,26 @@ python3 -m http.server 8080
 # открыть http://localhost:8080
 ```
 
-Опубликовать можно на GitHub Pages (Settings → Pages → папка
-`wedding-invitation`), Netlify/Vercel (drag-and-drop папки) или любом
-статическом хостинге — сборка не нужна.
+**GitHub Pages из этого репозитория — только через workflow, не через
+"Deploy from a branch".** У классического режима Pages нет выбора
+произвольной подпапки (только корень репозитория или `/docs`) — а
+в корне этого репозитория лежит README.md самого репозитория (про
+скиллы и проекты), не сайт. Если включить Pages в режиме "Deploy from
+a branch" на этой ветке, GitHub опубликует именно тот README, а не
+сайт — это и произошло.
+
+Правильный способ: в настройках репозитория — **Settings → Pages →
+Source → GitHub Actions** (не "Deploy from a branch"). В репозитории
+уже есть готовый workflow `.github/workflows/deploy-wedding-site.yml`,
+который собирает Pages-артефакт именно из `wedding-invitation/` и
+публикует его. После переключения источника на "GitHub Actions" он
+подхватится сам при следующем пуше в эту ветку, либо его можно
+запустить вручную: вкладка **Actions → Deploy wedding invitation to
+GitHub Pages → Run workflow**.
+
+Альтернатива без Actions — Netlify/Vercel: там при импорте репозитория
+есть поле "Base directory"/"Root directory", куда явно указывается
+`wedding-invitation` — сборка не нужна, просто раздача статики.
 
 При публикации обновите в `index.html`:
 - `<meta property="og:image" content="assets/photos/hero.jpg" />` — на
